@@ -1,1 +1,35 @@
-# London_Transport_Reliability_and_Economic_Impact
+# London-Transport-Reliability-and-Economic-Impact-
+Public transport delays, strikes, and infrastructure failures do not affect all areas equally. This project investigates whether transport unreliability disproportionately impacts commuters in outer boroughs (like Brent or Croydon) compared to central London, and correlates these delays with local economic data.
+
+Data Collection
+1. TfL Line Status — Manual Download 
+   status_all.json --> https://api.tfl.gov.uk/Line/Mode/tube,overground,elizabeth-line,dlr/Status
+   Tube status:
+   tube_status.json -> https://api.tfl.gov.uk/Line/Mode/tube/Status
+   overground status
+   status.json -> https://api.tfl.gov.uk/Line/Mode/overground/Status
+   Disturption 
+   service_disturption.json -> https://api.tfl.gov.uk/Line/Mode/tube,overground/Status?detail=true
+
+Official Source Links
+TfL API
+WhatOfficial SourceURLTfL API homepageTransport for London https://api.tfl.gov.ukTfL Open Data portalTransport for London https://tfl.gov.uk/info-for/open-data-usersTfL API documentationTransport for London https://api.tfl.gov.uk/swagger/ui/index.htmlTfL press releasesTransport for London https://tfl.gov.uk/info-for/media/press-releasesTfL performance reportsTransport for London https://tfl.gov.uk/corporate/publications-and-reports/underground-services-performance
+
+ONS / Census Data
+WhatOfficial SourceURLCensus 2021 custom dataOffice for National Statisticshttps://create.census.gov.uk/queryCensus TS058 distance to workONS Census 2021https://www.ons.gov.uk/datasets/TS058/editions/2021/versions/3Census TS061 method of travelONS Census 2021https://www.ons.gov.uk/datasets/TS061/editions/2021/versions/3National Travel SurveyDept for Transporthttps://www.gov.uk/government/collections/national-travel-survey-statistics
+
+London Data
+WhatOfficial SourceURLLondon Datastore (GLA)Greater London Authority
+https://data.london.gov.ukBorough boundary filesGLA / London Datastore https://data.london.gov.uk/dataset/statistical-gis-boundary-files-londonBorough income estimatesGLA Economics https://data.london.gov.uk/dataset/household-income-estimates-small-areasLTDS travel reportTransport for London https://tfl.gov.uk/corporate/publications-and-reports/travel-in-london-reports
+
+Rail & Disruption Data
+WhatOfficial SourceURLORR data portalOffice of Rail and Road
+https://dataportal.orr.gov.ukNetwork Rail open dataNetwork Railhttps://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feedsDelay attribution dataORRhttps://dataportal.orr.gov.uk/statistics/performance/delay-attribution
+
+Passenger & Impact Data
+WhatOfficial SourceURLTransport Focus surveysTransport Focushttps://www.transportfocus.org.uk/research-publicationsLondon TravelWatch reportsLondon TravelWatchhttps://www.londontravelwatch.org.uk/resources/publicationsTrust for London dataTrust for Londonhttps://trustforlondon.org.uk/dataNomis labour market dataONS Nomishttps://www.nomisweb.co.uk
+
+Strike History
+WhatOfficial SourceURLLondon Underground strike historyWikipedia
+https://en.wikipedia.org/wiki/London_Underground_strikesRMT union announcementsRMThttps://www.rmt.org.uk/news
+
