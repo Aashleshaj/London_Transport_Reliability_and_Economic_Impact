@@ -1,0 +1,12 @@
+name,modeName,date,statusSeverity,statusSeverityDescription,reason,disruptionDescription,closureText
+Bakerloo,tube,2026-03-31,10,Good Service,,,
+Central,tube,2026-03-31,9,Minor Delays,Central Line: Minor delays between Leytonstone and Hainault via Newbury Park due to a points failure at Hainault. GOOD SERVICE on the rest of the line.  ,,
+Circle,tube,2026-03-31,10,Good Service,,,
+District,tube,2026-03-31,10,Good Service,,,
+Hammersmith & City,tube,2026-03-31,10,Good Service,,,
+Jubilee,tube,2026-03-31,10,Good Service,,,
+Metropolitan,tube,2026-03-31,10,Good Service,,,
+Northern,tube,2026-03-31,10,Good Service,,,
+Piccadilly,tube,2026-03-31,5,Part Closure,"PICCADILLY LINE: Saturday 25 and Sunday 26 April, no service between Rayners Lane and Uxbridge. Use METROPOLITAN LINE services instead.",,
+Victoria,tube,2026-03-31,10,Good Service,,,
+Waterloo & City,tube,2026-03-31,4,Planned Closure,"Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",,
