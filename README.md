@@ -33,3 +33,52 @@ Strike History
 WhatOfficial SourceURLLondon Underground strike historyWikipedia
 https://en.wikipedia.org/wiki/London_Underground_strikesRMT union announcementsRMThttps://www.rmt.org.uk/news
 
+## Setup and Implementation
+
+1. Install dependencies:
+   ```bash
+   pip install pandas scipy streamlit plotly
+   ```
+
+2. Run data integration:
+   ```bash
+   python scripts/data_integration.py
+   ```
+
+3. Run correlation analysis:
+   ```bash
+   python scripts/correlation_analysis.py
+   ```
+
+4. Launch dashboard:
+   ```bash
+   streamlit run dashboard.py
+   ```
+
+## Files
+
+- `scripts/app.py`: JSON to CSV converter
+- `scripts/data_integration.py`: Merge transport and economic data
+- `scripts/correlation_analysis.py`: Statistical analysis
+- `dashboard.py`: Streamlit dashboard
+- `data/`: Data files
+
+## Current Status
+
+- ✅ Data pipeline for TfL API to CSV
+- ✅ Economic data integration using sample borough data
+- ✅ Correlation analysis with borough-level metrics
+- ✅ Streamlit dashboard with filter and correlation views
+- 🔄 Next: Acquire real economic data, geospatial mapping, time-series analysis
+
+## Sample Economic Data
+
+Sample files are available at `data/economic_data.csv` and `data/economic_data.json`.
+
+You can provide economic data in either format:
+
+- `data/economic_data.csv`
+- `data/economic_data.json`
+
+The integration script will automatically load JSON if CSV is not present. Use either file type for real borough-level income and employment data from GLA or ONS.
+

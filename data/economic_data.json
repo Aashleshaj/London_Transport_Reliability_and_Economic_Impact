@@ -1,0 +1,27 @@
+[
+  {
+    "borough": "Westminster",
+    "average_income": 52000,
+    "employment_rate": 0.88
+  },
+  {
+    "borough": "Camden",
+    "average_income": 47000,
+    "employment_rate": 0.83
+  },
+  {
+    "borough": "Islington",
+    "average_income": 45000,
+    "employment_rate": 0.81
+  },
+  {
+    "borough": "Brent",
+    "average_income": 36000,
+    "employment_rate": 0.76
+  },
+  {
+    "borough": "Croydon",
+    "average_income": 34000,
+    "employment_rate": 0.72
+  }
+]
