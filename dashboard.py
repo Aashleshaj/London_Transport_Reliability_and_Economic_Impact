@@ -1,0 +1,67 @@
+from pathlib import Path
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / 'data'
+
+transport_path = DATA_DIR / 'Status.csv'
+merged_path = DATA_DIR / 'merged_transport_economic.csv'
+summary_path = DATA_DIR / 'borough_disruption_summary.csv'
+
+st.set_page_config(page_title='London Transport Dashboard', layout='wide')
+st.title('London Transport Reliability & Economic Impact')
+
+transport_df = pd.read_csv(transport_path)
+merged_df = pd.read_csv(merged_path)
+borough_summary = pd.read_csv(summary_path)
+
+st.sidebar.header('Filters')
+selected_boroughs = st.sidebar.multiselect(
+    'Select borough(s)',
+    sorted(borough_summary['borough'].dropna().unique()),
+    default=sorted(borough_summary['borough'].dropna().unique())
+)
+
+filtered_merged = merged_df[merged_df['borough'].isin(selected_boroughs)]
+filtered_summary = borough_summary[borough_summary['borough'].isin(selected_boroughs)]
+
+st.header('Current Transport Status')
+col1, col2 = st.columns(2)
+with col1:
+    st.metric('Lines reported', len(filtered_merged))
+    st.metric('Boroughs selected', filtered_summary['borough'].nunique())
+with col2:
+    average_severity = filtered_summary['statusSeverity'].mean()
+    st.metric('Average severity', f'{average_severity:.2f}')
+
+st.subheader('Summary by Borough')
+st.dataframe(filtered_summary)
+
+st.subheader('Line-level Status')
+st.dataframe(filtered_merged[['name', 'modeName', 'statusSeverity', 'statusSeverityDescription', 'borough']])
+
+st.subheader('Severity by Borough')
+fig = px.bar(
+    filtered_summary,
+    x='borough',
+    y='statusSeverity',
+    labels={'statusSeverity': 'Average Severity'},
+    title='Average Disruption Severity by Borough'
+)
+st.plotly_chart(fig, use_container_width=True)
+
+st.subheader('Economic Context')
+fig2 = px.scatter(
+    filtered_summary,
+    x='average_income',
+    y='statusSeverity',
+    text='borough',
+    labels={'average_income': 'Average Income', 'statusSeverity': 'Average Severity'},
+    title='Income vs Disruption Severity'
+)
+fig2.update_traces(textposition='top center')
+st.plotly_chart(fig2, use_container_width=True)
+
+st.write('Use the sidebar to select boroughs and explore how transport reliability relates to economic indicators. Replace `data/economic_data.csv` with actual ONS/GLA borough data to improve analysis.')

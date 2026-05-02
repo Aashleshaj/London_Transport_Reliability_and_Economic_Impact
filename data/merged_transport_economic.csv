@@ -1,0 +1,12 @@
+name,modeName,date,statusSeverity,statusSeverityDescription,reason,disruptionDescription,closureText,borough,average_income,employment_rate
+Bakerloo,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Central,tube,2026-03-31,9,Minor Delays,Central Line: Minor delays between Leytonstone and Hainault via Newbury Park due to a points failure at Hainault. GOOD SERVICE on the rest of the line.  ,,,Islington,45000,0.81
+Circle,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+District,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Hammersmith & City,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Jubilee,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Metropolitan,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Northern,tube,2026-03-31,10,Good Service,,,,Camden,47000,0.83
+Piccadilly,tube,2026-03-31,5,Part Closure,"PICCADILLY LINE: Saturday 25 and Sunday 26 April, no service between Rayners Lane and Uxbridge. Use METROPOLITAN LINE services instead.",,,Westminster,52000,0.88
+Victoria,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
+Waterloo & City,tube,2026-03-31,4,Planned Closure,"Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",,,Westminster,52000,0.88
