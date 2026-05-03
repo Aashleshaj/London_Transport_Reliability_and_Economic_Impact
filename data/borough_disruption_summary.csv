@@ -1,4 +1,4 @@
-borough,statusSeverity,average_income,employment_rate,lines_reported
-Camden,10.0,47000,0.83,1
-Islington,9.0,45000,0.81,1
-Westminster,8.777777777777779,52000,0.88,9
+borough,lines_reported,average_severity,total_sales_m,total_gva_m,total_employees,total_companies
+Camden,1,10.0,2714.348421,991.1505322,19362.652268,1027.3992832
+Islington,1,9.0,1783.8136121,635.7937837,13090.021580999999,698.7398299
+Westminster,9,8.777777777777779,3383.945563,1313.9514694,35776.757489999996,1667.376589

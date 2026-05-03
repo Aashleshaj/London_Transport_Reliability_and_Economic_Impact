@@ -33,7 +33,7 @@ with col1:
     st.metric('Lines reported', len(filtered_merged))
     st.metric('Boroughs selected', filtered_summary['borough'].nunique())
 with col2:
-    average_severity = filtered_summary['statusSeverity'].mean()
+    average_severity = filtered_summary['average_severity'].mean()
     st.metric('Average severity', f'{average_severity:.2f}')
 
 st.subheader('Summary by Borough')
@@ -46,8 +46,8 @@ st.subheader('Severity by Borough')
 fig = px.bar(
     filtered_summary,
     x='borough',
-    y='statusSeverity',
-    labels={'statusSeverity': 'Average Severity'},
+    y='average_severity',
+    labels={'average_severity': 'Average Severity'},
     title='Average Disruption Severity by Borough'
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -55,13 +55,25 @@ st.plotly_chart(fig, use_container_width=True)
 st.subheader('Economic Context')
 fig2 = px.scatter(
     filtered_summary,
-    x='average_income',
-    y='statusSeverity',
+    x='total_gva_m',
+    y='average_severity',
     text='borough',
-    labels={'average_income': 'Average Income', 'statusSeverity': 'Average Severity'},
-    title='Income vs Disruption Severity'
+    labels={'total_gva_m': 'Borough GVA (£m)', 'average_severity': 'Average Severity'},
+    title='GVA vs Disruption Severity'
 )
 fig2.update_traces(textposition='top center')
 st.plotly_chart(fig2, use_container_width=True)
 
-st.write('Use the sidebar to select boroughs and explore how transport reliability relates to economic indicators. Replace `data/economic_data.csv` with actual ONS/GLA borough data to improve analysis.')
+st.subheader('Employment Context')
+fig3 = px.scatter(
+    filtered_summary,
+    x='total_employees',
+    y='average_severity',
+    text='borough',
+    labels={'total_employees': 'Total Employees', 'average_severity': 'Average Severity'},
+    title='Employment vs Disruption Severity'
+)
+fig3.update_traces(textposition='top center')
+st.plotly_chart(fig3, use_container_width=True)
+
+st.write('Use the sidebar to select boroughs and explore how transport reliability relates to borough-level economic metrics. Replace `data/economic_data.csv` with real ONS/GLA borough data if needed.')

@@ -1,12 +1,12 @@
-name,modeName,date,statusSeverity,statusSeverityDescription,reason,disruptionDescription,closureText,borough,average_income,employment_rate
-Bakerloo,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Central,tube,2026-03-31,9,Minor Delays,Central Line: Minor delays between Leytonstone and Hainault via Newbury Park due to a points failure at Hainault. GOOD SERVICE on the rest of the line.  ,,,Islington,45000,0.81
-Circle,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-District,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Hammersmith & City,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Jubilee,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Metropolitan,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Northern,tube,2026-03-31,10,Good Service,,,,Camden,47000,0.83
-Piccadilly,tube,2026-03-31,5,Part Closure,"PICCADILLY LINE: Saturday 25 and Sunday 26 April, no service between Rayners Lane and Uxbridge. Use METROPOLITAN LINE services instead.",,,Westminster,52000,0.88
-Victoria,tube,2026-03-31,10,Good Service,,,,Westminster,52000,0.88
-Waterloo & City,tube,2026-03-31,4,Planned Closure,"Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",,,Westminster,52000,0.88
+name,modeName,date,statusSeverity,statusSeverityDescription,reason,disruptionDescription,closureText,borough,Borough,total_sales_m,total_gva_m,total_export_m,total_imports_m,total_companies,total_employees,forecast_sales_2024_25,forecast_sales_2025_26,forecast_sales_2026_27,forecast_sales_2027_28,forecast_sales_2028_29
+Bakerloo,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Central,tube,2026-03-31,9,Minor Delays,Central Line: Minor delays between Leytonstone and Hainault via Newbury Park due to a points failure at Hainault. GOOD SERVICE on the rest of the line.  ,,,Islington,Islington,1783.8136121,635.7937837,112.10945353,102.9528413,698.7398299,13090.021580999999,80.15102430833333,86.92478139166667,94.85378341666667,104.19893629166666,115.28656345833333
+Circle,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+District,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Hammersmith & City,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Jubilee,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Metropolitan,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Northern,tube,2026-03-31,10,Good Service,,,,Camden,Camden,2714.348421,991.1505322,172.13841974,144.49503396,1027.3992832,19362.652268,122.22209345833333,132.83177208333333,145.24573216666667,159.86179604166668,177.20022529166667
+Piccadilly,tube,2026-03-31,5,Part Closure,"PICCADILLY LINE: Saturday 25 and Sunday 26 April, no service between Rayners Lane and Uxbridge. Use METROPOLITAN LINE services instead.",,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Victoria,tube,2026-03-31,10,Good Service,,,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
+Waterloo & City,tube,2026-03-31,4,Planned Closure,"Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",,,Westminster,Westminster,3383.945563,1313.9514694,228.1782485,194.459844,1667.376589,35776.757489999996,152.18196420833334,165.180961875,180.38939912499998,198.30266654166667,219.53105308333332
