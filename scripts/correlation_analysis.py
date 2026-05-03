@@ -8,28 +8,30 @@ SUMMARY_PATH = ROOT / 'data' / 'borough_disruption_summary.csv'
 
 merged_df = pd.read_csv(MERGED_PATH)
 
-borough_summary = merged_df.groupby('borough').agg(
-    statusSeverity=('statusSeverity', 'mean'),
-    average_income=('average_income', 'first'),
-    employment_rate=('employment_rate', 'first'),
+borough_summary = merged_df.groupby('borough', as_index=False).agg(
+    average_severity=('statusSeverity', 'mean'),
+    total_sales_m=('total_sales_m', 'first'),
+    total_gva_m=('total_gva_m', 'first'),
+    total_employees=('total_employees', 'first'),
+    total_companies=('total_companies', 'first'),
     lines_reported=('name', 'nunique')
-).reset_index()
+)
 
 print('Borough Summary:')
 print(borough_summary)
 
-valid_income = borough_summary.dropna(subset=['statusSeverity', 'average_income'])
-valid_employment = borough_summary.dropna(subset=['statusSeverity', 'employment_rate'])
+valid_gva = borough_summary.dropna(subset=['average_severity', 'total_gva_m'])
+valid_employees = borough_summary.dropna(subset=['average_severity', 'total_employees'])
 
-if len(valid_income) >= 2:
-    severity_vs_income = pearsonr(valid_income['statusSeverity'], valid_income['average_income'])
-    print(f"\nCorrelation between average disruption severity and average income: {severity_vs_income[0]:.2f} (p-value: {severity_vs_income[1]:.2f})")
+if len(valid_gva) >= 2:
+    severity_vs_gva = pearsonr(valid_gva['average_severity'], valid_gva['total_gva_m'])
+    print(f"\nCorrelation between average disruption severity and borough GVA: {severity_vs_gva[0]:.2f} (p-value: {severity_vs_gva[1]:.2f})")
 else:
-    print('\nNot enough boroughs with income data to calculate correlation.')
+    print('\nNot enough boroughs with GVA data to calculate correlation.')
 
-if len(valid_employment) >= 2:
-    severity_vs_employment = pearsonr(valid_employment['statusSeverity'], valid_employment['employment_rate'])
-    print(f"Correlation between average disruption severity and employment rate: {severity_vs_employment[0]:.2f} (p-value: {severity_vs_employment[1]:.2f})")
+if len(valid_employees) >= 2:
+    severity_vs_employees = pearsonr(valid_employees['average_severity'], valid_employees['total_employees'])
+    print(f"Correlation between average disruption severity and borough employment: {severity_vs_employees[0]:.2f} (p-value: {severity_vs_employees[1]:.2f})")
 else:
     print('Not enough boroughs with employment data to calculate correlation.')
 

@@ -73,6 +73,8 @@ https://en.wikipedia.org/wiki/London_Underground_strikesRMT union announcementsR
 
 ## Sample Economic Data
 
+Economic_data has been taken from below path and edit it accordingly :
+- https://data.london.gov.uk/dataset/low-carbon-environmental-goods-and-services-sector-lcegs-snapsho-2rjz1
 Sample files are available at `data/economic_data.csv` and `data/economic_data.json`.
 
 You can provide economic data in either format:
@@ -82,3 +84,4 @@ You can provide economic data in either format:
 
 The integration script will automatically load JSON if CSV is not present. Use either file type for real borough-level income and employment data from GLA or ONS.
 
+transport data has line-level disruptions, but economic data is borough-level. This links them (e.g., "Northern" line affects Camden borough). You can expand this mapping for more lines or modes (e.g., Overground, DLR).
