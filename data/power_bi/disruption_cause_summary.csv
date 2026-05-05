@@ -1,0 +1,5 @@
+disruption_cause,incidents,lines_affected,avg_severity,severity_label
+Fire Alert,3,3,4.666666666666667,Severe
+Signal Failure,2,2,3.0,Severe
+Faulty Train,1,1,9.0,Minor
+Customer Incident,1,1,6.0,Severe

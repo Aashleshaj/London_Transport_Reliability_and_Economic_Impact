@@ -1,0 +1,474 @@
+
+<h2 class="sr-only">Step-by-step Power BI guide for London Transport dashboard</h2>
+
+<style>
+  .guide { font-family: var(--font-sans); max-width: 660px; padding: 0.5rem 0; }
+  .phase { margin-bottom: 2rem; }
+  .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; background: var(--color-background-info); color: var(--color-text-info); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .step { display: flex; gap: 12px; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--color-background-tertiary); border: 0.5px solid var(--color-border-secondary); font-size: 11px; font-weight: 500; color: var(--color-text-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-body { flex: 1; }
+  .step-action { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 3px; }
+  .step-detail { font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+  .step-detail code { background: var(--color-background-tertiary); border: 0.5px solid var(--color-border-secondary); border-radius: 4px; padding: 1px 5px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); }
+  .file-tag { display: inline-block; background: var(--color-background-success); color: var(--color-text-success); font-size: 11px; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; margin: 2px 2px 2px 0; }
+  .note { display: flex; gap: 8px; padding: 0.6rem 0.9rem; background: var(--color-background-warning); border-left: 2px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; margin: 0.5rem 0 0.75rem; }
+  .note-text { font-size: 13px; color: var(--color-text-warning); line-height: 1.5; }
+  .rel-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 0.5rem; }
+  .rel-from { font-size: 12px; font-family: var(--font-mono); padding: 4px 8px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); text-align: center; color: var(--color-text-primary); }
+  .rel-arrow { font-size: 13px; color: var(--color-text-secondary); text-align: center; }
+  .rel-type { font-size: 11px; color: var(--color-text-secondary); text-align: center; }
+  .dax-block { background: var(--color-background-tertiary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; margin: 0.5rem 0; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); line-height: 1.6; white-space: pre-wrap; }
+  .page-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 0.75rem 1rem; margin-bottom: 0.75rem; background: var(--color-background-primary); }
+  .page-card-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 6px; }
+  .visual-item { font-size: 13px; color: var(--color-text-secondary); padding: 2px 0; }
+  .visual-item code { background: var(--color-background-secondary); border-radius: 3px; padding: 1px 4px; font-size: 11px; color: var(--color-text-primary); font-family: var(--font-mono); }
+  .color-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .color-swatch { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; }
+  .color-label { font-size: 13px; color: var(--color-text-secondary); }
+  .color-hex { font-size: 12px; font-family: var(--font-mono); color: var(--color-text-tertiary); }
+</style>
+
+<div class="guide">
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">A</div>
+      <div class="phase-title">Before you open Power BI — run the Python pipeline</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Run data_integration.py</p>
+        <p class="step-detail">Open a terminal in your project folder and run:<br><code>python scripts/data_integration.py</code><br>This produces 4 output CSVs in the <code>data/</code> folder.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Run correlation_analysis.py</p>
+        <p class="step-detail"><code>python scripts/correlation_analysis.py</code><br>This produces 3 more CSVs including risk scores and cause breakdown.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Confirm all 7 files exist in data/</p>
+        <p class="step-detail">
+          <span class="file-tag">all_lines_combined.csv</span>
+          <span class="file-tag">disruption_enriched.csv</span>
+          <span class="file-tag">borough_disruption_summary.csv</span>
+          <span class="file-tag">disruption_cause_summary.csv</span>
+          <span class="file-tag">mode_disruption_summary.csv</span>
+          <span class="file-tag">forecast_disruption_risk.csv</span>
+          <span class="file-tag">merged_transport_economic.csv</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">B</div>
+      <div class="phase-title">Load the 7 CSV files into Power BI</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Open Power BI Desktop → Get Data</p>
+        <p class="step-detail">Click <code>Home</code> tab → <code>Get Data</code> → <code>Text/CSV</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Load all_lines_combined.csv first</p>
+        <p class="step-detail">Navigate to your <code>data/</code> folder → select <code>all_lines_combined.csv</code> → click <code>Load</code> (not Transform — the data is already clean).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Repeat for the remaining 6 files</p>
+        <p class="step-detail">Each time: <code>Get Data → Text/CSV → select file → Load</code>. After all 7 are loaded you will see them listed in the Data pane on the right.</p>
+      </div>
+    </div>
+    <div class="note">
+      <div class="note-text">If Power BI asks about data type detection, choose "Based on first 200 rows". Do not change column types — they are already correct.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p class="step-action">Fix the is_disrupted column type</p>
+        <p class="step-detail">In the Data pane click <code>all_lines_combined</code> → find column <code>is_disrupted</code> → in the column header dropdown change type from Text to <code>True/False</code>. Do the same for <code>disruption_enriched</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">C</div>
+      <div class="phase-title">Build the data model (relationships)</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Switch to Model view</p>
+        <p class="step-detail">Click the <code>Model</code> icon on the left sidebar (looks like three connected shapes). You will see all 7 tables laid out.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Create these 4 relationships by dragging</p>
+        <p class="step-detail">Drag the <code>borough</code> field from one table and drop it onto <code>borough</code> in another to create each relationship:</p>
+        <div style="margin-top: 8px;">
+          <div class="rel-row"><div class="rel-from">all_lines_combined<br>[borough]</div><div class="rel-arrow">→<br><span class="rel-type">Many:1</span></div><div class="rel-from">borough_disruption<br>_summary [borough]</div></div>
+          <div class="rel-row"><div class="rel-from">disruption_enriched<br>[borough]</div><div class="rel-arrow">→<br><span class="rel-type">Many:1</span></div><div class="rel-from">borough_disruption<br>_summary [borough]</div></div>
+          <div class="rel-row"><div class="rel-from">forecast_disruption<br>_risk [borough]</div><div class="rel-arrow">→<br><span class="rel-type">1:1</span></div><div class="rel-from">borough_disruption<br>_summary [borough]</div></div>
+          <div class="rel-row"><div class="rel-from">disruption_enriched<br>[name]</div><div class="rel-arrow">↔<br><span class="rel-type">Many:Many</span></div><div class="rel-from">all_lines_combined<br>[name]</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Set cross-filter direction for Many:Many</p>
+        <p class="step-detail">Double-click the line between <code>disruption_enriched</code> and <code>all_lines_combined</code> → set Cross filter direction to <code>Both</code> → click OK.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">D</div>
+      <div class="phase-title">Create the 6 DAX measures</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Right-click all_lines_combined → New measure</p>
+        <p class="step-detail">In the Data pane, right-click the <code>all_lines_combined</code> table → <code>New measure</code>. A formula bar appears at the top. Paste each measure below and press Enter.</p>
+      </div>
+    </div>
+    <div class="dax-block">Disruption Rate % = 
+DIVIDE(
+  COUNTROWS(FILTER('all_lines_combined',
+    'all_lines_combined'[is_disrupted] = TRUE())),
+  COUNTROWS('all_lines_combined'), 0
+) * 100</div>
+    <div class="dax-block">Avg Severity = 
+AVERAGE('all_lines_combined'[statusSeverity])</div>
+    <div class="dax-block">Total Disruptions = 
+COUNTROWS('disruption_enriched')</div>
+    <div class="dax-block">Total GVA at Risk £m = 
+SUM('forecast_disruption_risk'[estimated_gva_at_risk_m])</div>
+    <div class="dax-block">Severity Band = 
+SWITCH(TRUE(),
+  [Avg Severity] >= 9, "Good Service",
+  [Avg Severity] >= 7, "Minor Issues",
+  [Avg Severity] >= 5, "Moderate",
+  "Severe"
+)</div>
+    <div class="dax-block">Total Lines Monitored = 
+DISTINCTCOUNT('all_lines_combined'[name])</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">E</div>
+      <div class="phase-title">Create Page 1 — Network overview</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Rename the first page</p>
+        <p class="step-detail">Right-click the tab at the bottom → <code>Rename page</code> → type <code>Network Overview</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Add 4 KPI cards along the top</p>
+        <p class="step-detail">In Visualizations pane click <code>Card</code> → drag it to the top-left. In the Fields pane drag in <code>[Disruption Rate %]</code>. Repeat for 3 more cards: <code>[Total Disruptions]</code>, <code>[Avg Severity]</code>, <code>[Total GVA at Risk £m]</code>. Arrange them in a row.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Add a Stacked Bar Chart — lines by mode and status</p>
+        <p class="step-detail">Click <code>Stacked bar chart</code> visual → set:<br>
+          X-axis: <code>all_lines_combined[modeName]</code><br>
+          Y-axis: <code>Count of all_lines_combined[name]</code><br>
+          Legend: <code>all_lines_combined[severity_label]</code>
+        </p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p class="step-action">Add a Donut Chart — severity mix</p>
+        <p class="step-detail">Click <code>Donut chart</code> → set:<br>
+          Legend: <code>all_lines_combined[severity_label]</code><br>
+          Values: <code>Count of all_lines_combined[name]</code>
+        </p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <p class="step-action">Add a Table — all lines detail</p>
+        <p class="step-detail">Click <code>Table</code> visual → drag in:<br>
+          <code>name</code>, <code>modeName</code>, <code>severity_label</code>, <code>borough</code>, <code>is_disrupted</code>, <code>reason</code> (all from <code>all_lines_combined</code>)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">F</div>
+      <div class="phase-title">Create Page 2 — Disruption analysis</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Add a new page → name it "Disruption Analysis"</p>
+        <p class="step-detail">Click the <code>+</code> at the bottom → right-click → Rename</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Add a horizontal Bar Chart — disruptions by cause</p>
+        <p class="step-detail">Click <code>Bar chart</code> → set:<br>
+          Y-axis: <code>disruption_cause_summary[disruption_cause]</code><br>
+          X-axis: <code>disruption_cause_summary[incidents]</code><br>
+          Color: <code>disruption_cause_summary[avg_severity]</code> → in Format pane set Diverging color scale (red = low severity score)</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Add a Bar Chart — disruption rate by mode</p>
+        <p class="step-detail">Click <code>Clustered bar chart</code> → set:<br>
+          X-axis: <code>mode_disruption_summary[modeName]</code><br>
+          Y-axis: <code>mode_disruption_summary[disruption_rate_pct]</code><br>
+          Color: <code>mode_disruption_summary[avg_severity]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p class="step-action">Add a Matrix — borough vs cause</p>
+        <p class="step-detail">Click <code>Matrix</code> visual → set:<br>
+          Rows: <code>disruption_enriched[borough]</code><br>
+          Columns: <code>disruption_enriched[disruption_cause]</code><br>
+          Values: <code>Count of disruption_enriched[name]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <p class="step-action">Add a Table — disruption detail rows</p>
+        <p class="step-detail">Click <code>Table</code> → drag in from <code>disruption_enriched</code>:<br>
+          <code>name</code>, <code>modeName</code>, <code>severity_label</code>, <code>disruption_cause</code>, <code>affected_section</code>, <code>reason</code>, <code>borough</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <p class="step-action">Add a Slicer — filter by severity</p>
+        <p class="step-detail">Click <code>Slicer</code> → drag in <code>all_lines_combined[severity_label]</code>. In Format pane change style to <code>Dropdown</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">G</div>
+      <div class="phase-title">Create Page 3 — Economic impact</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Add a new page → name it "Economic Impact"</p>
+        <p class="step-detail">Click <code>+</code> → rename</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Add Scatter Chart — GVA vs severity</p>
+        <p class="step-detail">Click <code>Scatter chart</code> → set:<br>
+          X-axis: <code>borough_disruption_summary[total_gva_m]</code><br>
+          Y-axis: <code>borough_disruption_summary[average_severity]</code><br>
+          Size: <code>borough_disruption_summary[total_employees]</code><br>
+          Legend / Details: <code>borough_disruption_summary[borough]</code><br>
+          Color saturation: <code>borough_disruption_summary[disruption_rate_pct]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Add Scatter Chart — employment vs disruption rate</p>
+        <p class="step-detail">Click <code>Scatter chart</code> → set:<br>
+          X-axis: <code>borough_disruption_summary[total_employees]</code><br>
+          Y-axis: <code>borough_disruption_summary[disruption_rate_pct]</code><br>
+          Details: <code>borough_disruption_summary[borough]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p class="step-action">Add a Bar Chart — GVA at risk by borough</p>
+        <p class="step-detail">Click <code>Clustered bar chart</code> → set:<br>
+          X-axis: <code>forecast_disruption_risk[borough]</code><br>
+          Y-axis: <code>forecast_disruption_risk[estimated_gva_at_risk_m]</code><br>
+          Legend: <code>forecast_disruption_risk[risk_band]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <p class="step-action">Add a Table — borough economic summary</p>
+        <p class="step-detail">Click <code>Table</code> → drag in from <code>borough_disruption_summary</code>:<br>
+          <code>borough</code>, <code>total_gva_m</code>, <code>total_employees</code>, <code>total_sales_m</code>, <code>disruption_rate_pct</code>, <code>average_severity</code></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">H</div>
+      <div class="phase-title">Create Page 4 — Forecast &amp; risk</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Add a new page → name it "Forecast and Risk"</p>
+        <p class="step-detail">Click <code>+</code> → rename</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Add Bar Chart — composite risk score by borough</p>
+        <p class="step-detail">Click <code>Clustered bar chart</code> → set:<br>
+          X-axis: <code>forecast_disruption_risk[borough]</code><br>
+          Y-axis: <code>forecast_disruption_risk[composite_risk_score]</code><br>
+          Legend: <code>forecast_disruption_risk[risk_band]</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Add Line Chart — 5-year forecast sales</p>
+        <p class="step-detail">First unpivot the forecast columns in Power Query: <code>Transform Data → select the 5 forecast_sales columns → Unpivot columns</code>. This gives you an <code>Attribute</code> (year) and <code>Value</code> (sales £m) column.<br><br>
+          Then in the visual: X-axis = <code>Attribute</code>, Y-axis = <code>Value</code>, Legend = <code>borough</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p class="step-action">Add a Gauge — risk score for selected borough</p>
+        <p class="step-detail">Click <code>Gauge</code> → set:<br>
+          Value: <code>forecast_disruption_risk[composite_risk_score]</code><br>
+          Min value: 0, Max value: 1<br>
+          Target value: 0.5 (medium threshold)<br>
+          This responds to the borough slicer on the page.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <p class="step-action">Add a Slicer — risk band filter</p>
+        <p class="step-detail">Click <code>Slicer</code> → drag in <code>forecast_disruption_risk[risk_band]</code>. Change style to <code>Tile</code> in Format pane for easy click-through filtering.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">I</div>
+      <div class="phase-title">Add slicers to every page</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Add these 5 slicers to each page</p>
+        <p class="step-detail">
+          <code>borough_disruption_summary[borough]</code><br>
+          <code>all_lines_combined[modeName]</code><br>
+          <code>all_lines_combined[severity_label]</code><br>
+          <code>disruption_enriched[disruption_cause]</code><br>
+          <code>forecast_disruption_risk[risk_band]</code>
+        </p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Sync slicers across pages</p>
+        <p class="step-detail">Go to <code>View → Sync slicers</code>. For each slicer, tick all 4 page columns so selections carry across pages. This lets filtering by borough on Page 1 automatically filter all other pages.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">J</div>
+      <div class="phase-title">Apply the colour theme</div>
+    </div>
+    <div style="margin-bottom: 0.75rem;">
+      <div class="color-row"><div class="color-swatch" style="background:#27AE60;"></div><span class="color-label">Good Service / Very Low risk</span><span class="color-hex">#27AE60</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#F39C12;"></div><span class="color-label">Minor Delays / Medium risk</span><span class="color-hex">#F39C12</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#E74C3C;"></div><span class="color-label">Severe Delays / High risk</span><span class="color-hex">#E74C3C</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#7F0000;"></div><span class="color-label">Suspended / Critical risk</span><span class="color-hex">#7F0000</span></div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Apply colours to severity_label in each bar/donut chart</p>
+        <p class="step-detail">Select a chart → <code>Format pane → Data colors → fx (conditional formatting)</code> → set rules: if severity_label = "Good Service" → hex <code>#27AE60</code>, "Minor Delays" → <code>#F39C12</code>, "Severe Delays" → <code>#E74C3C</code>, "Suspended" → <code>#7F0000</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Apply the same logic to risk_band colours</p>
+        <p class="step-detail">Wherever <code>risk_band</code> is used as a legend: Very Low = <code>#27AE60</code>, Low = <code>#2ECC71</code>, Medium = <code>#F39C12</code>, High = <code>#E74C3C</code>, Critical = <code>#7F0000</code></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">K</div>
+      <div class="phase-title">Save and publish</div>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p class="step-action">Save the .pbix file</p>
+        <p class="step-detail"><code>File → Save as → LondonTransportDashboard.pbix</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p class="step-action">Publish to Power BI Service (optional)</p>
+        <p class="step-detail"><code>Home → Publish → select your workspace</code>. Once published, you can share via URL and set up scheduled refresh.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p class="step-action">Set up scheduled refresh (optional)</p>
+        <p class="step-detail">In Power BI Service: open the dataset → <code>Settings → Scheduled refresh → On</code>. Set frequency (daily recommended). You must also install a <code>Power BI Gateway</code> on the machine where your CSV files live.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
