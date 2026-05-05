@@ -1,21 +1,21 @@
 name,modeName,date,statusSeverity,statusSeverityDescription,reason,disruptionDescription,closureText,source,borough,severity_label,is_disrupted,disruption_cause,affected_section
-Windrush,overground,2026-04-22,10,Good Service,,,,service_disturption,Lambeth,Good Service,False,Unknown,
-Bakerloo,tube,2026-04-22,9,Minor Delays,Bakerloo Line: Minor delays between Queen's Park and Harrow & Wealdstone due to an earlier faulty train at Paddington. GOOD SERVICE on the rest of the line. ,,,service_disturption,Westminster,Minor Delays,True,Faulty Train,Queen's Park and Harrow & Wealdstone
-Central,tube,2026-04-22,10,Good Service,,,,service_disturption,Islington,Good Service,False,Unknown,
-Circle,tube,2026-04-22,2,Suspended,Circle Line: No service while we respond to a fire alert at Paddington. Tickets are being accepted on London buses.  ,,,service_disturption,Westminster,Suspended,True,Fire Alert,
-District,tube,2026-04-22,3,Part Suspended,District Line: No service between Turnham Green and Richmond while we fix a signal failure at Gunnersbury. NO SERVICE between High Street Kensington and Edgware Road while we respond to a fire alert at Paddington. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses and South Western Railway.  ,,,service_disturption,Westminster,Part Suspended,True,Signal Failure,Turnham Green and Richmond
-Hammersmith & City,tube,2026-04-22,10,Good Service,,,,service_disturption,Westminster,Good Service,False,Unknown,
-Jubilee,tube,2026-04-22,6,Severe Delays,"Jubilee Line: Severe delays due to an earlier fire alert at West Ham. Tickets are being accepted on London Buses, DLR, Elizabeth Line, Mildmay line and C2C.  ",,,service_disturption,Westminster,Severe Delays,True,Fire Alert,
-Liberty,overground,2026-04-22,10,Good Service,,,,service_disturption,Havering,Good Service,False,Unknown,
-Lioness,overground,2026-04-22,10,Good Service,,,,service_disturption,Brent,Good Service,False,Unknown,
-Metropolitan,tube,2026-04-22,6,Severe Delays,Metropolitan Line: Severe delays between Harrow-on-the-Hill and Aldgate while we respond to a fire alert at Paddington. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses.  ,,,service_disturption,Westminster,Severe Delays,True,Fire Alert,Harrow-on-the-Hill and Aldgate
-Mildmay,overground,2026-04-22,3,Part Suspended,Mildmay Line: No service between Richmond and Willesden Junction while we fix a signal failure at Gunnersbury. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses.  ,,,service_disturption,Hackney,Part Suspended,True,Signal Failure,Richmond and Willesden Junction
-Northern,tube,2026-04-22,6,Severe Delays,"Northern Line: Severe delays due to an earlier customer incident at Hampstead. Tickets are being accepted on London Buses, London Trams, Southeastern, South Western Railway and Thameslink. ",,,service_disturption,Camden,Severe Delays,True,Customer Incident,
-Piccadilly,tube,2026-04-22,10,Good Service,,,,service_disturption,Westminster,Good Service,False,Unknown,
-Suffragette,overground,2026-04-22,10,Good Service,,,,service_disturption,Waltham Forest,Good Service,False,Unknown,
-Victoria,tube,2026-04-22,10,Good Service,,,,service_disturption,Westminster,Good Service,False,Unknown,
-Waterloo & City,tube,2026-04-22,10,Good Service,,,,service_disturption,Westminster,Good Service,False,Unknown,
-Weaver,overground,2026-04-22,10,Good Service,,,,service_disturption,Tower Hamlets,Good Service,False,Unknown,
+Windrush,overground,2026-04-22,10,Good Service,,,,service_disruption,Lambeth,Good Service,False,Unknown,
+Bakerloo,tube,2026-04-22,9,Minor Delays,Bakerloo Line: Minor delays between Queen's Park and Harrow & Wealdstone due to an earlier faulty train at Paddington. GOOD SERVICE on the rest of the line. ,,,service_disruption,Westminster,Minor Delays,True,Faulty Train,Queen's Park and Harrow & Wealdstone
+Central,tube,2026-04-22,10,Good Service,,,,service_disruption,Islington,Good Service,False,Unknown,
+Circle,tube,2026-04-22,2,Suspended,Circle Line: No service while we respond to a fire alert at Paddington. Tickets are being accepted on London buses.  ,,,service_disruption,Westminster,Suspended,True,Fire Alert,
+District,tube,2026-04-22,3,Part Suspended,District Line: No service between Turnham Green and Richmond while we fix a signal failure at Gunnersbury. NO SERVICE between High Street Kensington and Edgware Road while we respond to a fire alert at Paddington. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses and South Western Railway.  ,,,service_disruption,Westminster,Part Suspended,True,Signal Failure,Turnham Green and Richmond
+Hammersmith & City,tube,2026-04-22,10,Good Service,,,,service_disruption,Westminster,Good Service,False,Unknown,
+Jubilee,tube,2026-04-22,6,Severe Delays,"Jubilee Line: Severe delays due to an earlier fire alert at West Ham. Tickets are being accepted on London Buses, DLR, Elizabeth Line, Mildmay line and C2C.  ",,,service_disruption,Westminster,Severe Delays,True,Fire Alert,
+Liberty,overground,2026-04-22,10,Good Service,,,,service_disruption,Havering,Good Service,False,Unknown,
+Lioness,overground,2026-04-22,10,Good Service,,,,service_disruption,Brent,Good Service,False,Unknown,
+Metropolitan,tube,2026-04-22,6,Severe Delays,Metropolitan Line: Severe delays between Harrow-on-the-Hill and Aldgate while we respond to a fire alert at Paddington. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses.  ,,,service_disruption,Westminster,Severe Delays,True,Fire Alert,Harrow-on-the-Hill and Aldgate
+Mildmay,overground,2026-04-22,3,Part Suspended,Mildmay Line: No service between Richmond and Willesden Junction while we fix a signal failure at Gunnersbury. GOOD SERVICE on the rest of the line. Tickets are being accepted on London Buses.  ,,,service_disruption,Hackney,Part Suspended,True,Signal Failure,Richmond and Willesden Junction
+Northern,tube,2026-04-22,6,Severe Delays,"Northern Line: Severe delays due to an earlier customer incident at Hampstead. Tickets are being accepted on London Buses, London Trams, Southeastern, South Western Railway and Thameslink. ",,,service_disruption,Camden,Severe Delays,True,Customer Incident,
+Piccadilly,tube,2026-04-22,10,Good Service,,,,service_disruption,Westminster,Good Service,False,Unknown,
+Suffragette,overground,2026-04-22,10,Good Service,,,,service_disruption,Waltham Forest,Good Service,False,Unknown,
+Victoria,tube,2026-04-22,10,Good Service,,,,service_disruption,Westminster,Good Service,False,Unknown,
+Waterloo & City,tube,2026-04-22,10,Good Service,,,,service_disruption,Westminster,Good Service,False,Unknown,
+Weaver,overground,2026-04-22,10,Good Service,,,,service_disruption,Tower Hamlets,Good Service,False,Unknown,
 Windrush,overground,2026-03-31,6,Severe Delays,Windrush Line: Severe delays due to an earlier signal failure at Brockley. London Underground is accepting tickets via any reasonable route.  ,,,status_all,Lambeth,Severe Delays,True,,
 Bakerloo,tube,2026-03-31,10,Good Service,,,,status_all,Westminster,Good Service,False,,
 Victoria,tube,2026-03-31,10,Good Service,,,,status_all,Westminster,Good Service,False,,
