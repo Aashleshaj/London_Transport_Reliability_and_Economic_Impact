@@ -49,11 +49,10 @@ The pipeline goes from raw TfL JSON → cleaned CSVs → statistical analysis �
 | `Status.json` | `https://api.tfl.gov.uk/Line/Mode/overground/Status` | Overground only |
 | `tube_status.json` | `https://api.tfl.gov.uk/Line/Mode/tube/Status` | Tube only |
 | `Status_all.json` | `https://api.tfl.gov.uk/Line/Mode/tube,overground,elizabeth-line,dlr/Status` | All modes |
-| `service_disturption.json` | `https://api.tfl.gov.uk/Line/Mode/tube,overground/Status?detail=true` | Disruptions with full reason text |
+| `service_disruption.json` | `https://api.tfl.gov.uk/Line/Mode/tube,overground/Status?detail=true` | Disruptions with full reason text |
 | `economic_data.csv` | `https://data.london.gov.uk/dataset/low-carbon-environmental-goods-and-services-sector-lcegs-snapsho-2rjz1` | Economic_data created from kMatrix_LCEGS_GLA_2023_24_Datasets |
 
 TfL API home: https://api.tfl.gov.uk  
-TfL Open Data portal: https://tfl.gov.uk/info-for/open-data-users
 
 ### Economic Data (GLA LCEGS 2023/24)
 
@@ -92,7 +91,7 @@ London_Transport_Reliability_and_Economic_Impact/
     ├── ── RAW INPUTS ──────────────────────────────────────────────
     ├── Status.csv                  # Tube-only snapshot (11 lines)
     ├── Status_all.csv              # All modes: tube + DLR + Elizabeth + Overground (19 lines)
-    ├── service_disturption.csv     # Disrupted lines only, with full reason text
+    ├── service_disruption.csv     # Disrupted lines only, with full reason text
     ├── tube_status.csv             # Tube snapshot (same structure as Status.csv)
     ├── economic_data.csv           # Borough-level GVA, sales, employment, 5-yr forecast
     │
@@ -117,7 +116,7 @@ London_Transport_Reliability_and_Economic_Impact/
 |---|---|---|---|
 | `Status.csv` | 11 | name, modeName, statusSeverity, reason | Tube only |
 | `Status_all.csv` | 19 | name, modeName, statusSeverity, reason | All modes including DLR, Elizabeth, Overground |
-| `service_disturption.csv` | 17 | name, statusSeverity, reason, disruptionDescription | Contains detailed reason text — used for root-cause classification |
+| `service_disruption.csv` | 17 | name, statusSeverity, reason, disruptionDescription | Contains detailed reason text — used for root-cause classification |
 | `economic_data.csv` | ~2,000 | Borough, GVA £m, Sales £m, Employees, Forecasts | GLA LCEGS sector-level data, aggregated to borough level |
 
 ### Generated Output CSVs (Power BI inputs)
@@ -138,7 +137,7 @@ London_Transport_Reliability_and_Economic_Impact/
 
 ### `scripts/data_integration.py`
 
-- Loads all transport CSVs (`Status.csv`, `Status_all.csv`, `service_disturption.csv`) and unifies them into a single deduplicated fact table.
+- Loads all transport CSVs (`Status.csv`, `Status_all.csv`, `service_disruption.csv`) and unifies them into a single deduplicated fact table.
 - Expanded `LINE_TO_BOROUGH` mapping from 11 entries to 19, covering all Overground strands (e.g. Liberty → Havering, Mildmay → Hackney, Windrush → Lambeth), DLR → Tower Hamlets, and Elizabeth line → Westminster.
 - Added `disruption_cause` column via a regex classifier that extracts root cause from reason text: Fire Alert, Signal Failure, Faulty Train, Customer Incident, Points Failure, Flooding, Strike, and more.
 - Added `affected_section` column extracting "between X and Y" from reason text.
@@ -354,6 +353,7 @@ Add to every page: Borough, Transport Mode, Severity Label, Disruption Cause, Ri
 | Outer-borough expansion | Expand `LINE_TO_BOROUGH` to secondary boroughs served by each line (e.g. Jubilee → Southwark, Greenwich). |
 | Machine learning | Train a classification model on historical disruption patterns to predict next-day risk by line. |
 | Real economic data | Replace GLA LCEGS sample with ONS borough income estimates or GLA household income data for richer correlation. |
+| Date Specific Weekly/Monthly/Yearly Analysis | Apply Date Range Time Analysis on multiple datasets |
 
 ---
 
