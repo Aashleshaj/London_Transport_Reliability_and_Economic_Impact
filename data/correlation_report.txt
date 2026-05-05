@@ -1,0 +1,35 @@
+London Transport – Correlation & Disruption Analysis
+============================================================
+
+Disruption Cause Breakdown:
+ disruption_cause  incidents  lines_affected  avg_severity severity_label
+       Fire Alert          3               3      4.666667         Severe
+   Signal Failure          2               2      3.000000         Severe
+     Faulty Train          1               1      9.000000          Minor
+Customer Incident          1               1      6.000000         Severe
+
+Mode Disruption Summary:
+      modeName  total_lines  disrupted_lines  avg_severity  disruption_rate_pct
+           dlr            1                0     10.000000                  0.0
+elizabeth-line            1                1      6.000000                100.0
+    overground            6                2      9.083333                 33.3
+          tube           11                9      8.181818                 81.8
+
+Pearson Correlations:
+  Severity vs Borough GVA: r=-0.508, p=0.163
+  Severity vs Employment: r=-0.469, p=0.203
+  Severity vs Sales: r=-0.518, p=0.153
+  Disruption Rate % vs GVA: r=0.634, p=0.066
+  Disruption Rate % vs Employment: r=0.544, p=0.130
+
+Borough Risk Scores:
+       borough  composite_risk_score risk_band  estimated_gva_at_risk_m
+         Brent                 0.000       NaN                     0.00
+        Camden                 0.533    Medium                    10.57
+       Hackney                 0.633      High                     5.31
+      Havering                 0.000       NaN                     0.00
+     Islington                 0.433    Medium                     5.51
+       Lambeth                 0.533    Medium                     4.12
+ Tower Hamlets                 0.000       NaN                     0.00
+Waltham Forest                 0.000       NaN                     0.00
+   Westminster                 0.457    Medium                    12.01
