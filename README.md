@@ -4,6 +4,7 @@
 >
 > This project collects live TfL service status data across all modes (Tube, Overground, DLR, Elizabeth line), classifies disruptions by root cause, merges them with borough-level economic data, and surfaces actionable insight through a Streamlit dashboard and a Power BI report.
 
+![London Transport Reliability and Economic Impact](data/flowchart.png)
 ---
 
 ## Table of Contents
