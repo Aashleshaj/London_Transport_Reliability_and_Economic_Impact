@@ -1,0 +1,42 @@
+name: Live TfL Data Pipeline
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # every 15 min — GitHub throttles/queues 5-min crons unreliably
+  workflow_dispatch: {}       # lets you trigger a run manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  poll-and-process:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas scipy requests schedule
+
+      - name: Poll TfL API and append to history log
+        env:
+          TFL_APP_ID: ${{ secrets.TFL_APP_ID }}
+          TFL_APP_KEY: ${{ secrets.TFL_APP_KEY }}
+        run: python scripts/live_status_logger.py --once
+
+      - name: Run data integration
+        run: python scripts/data_integration.py
+
+      - name: Run correlation analysis
+        run: python scripts/correlation_analysis.py
+
+      - name: Commit updated data back to the repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Live TfL poll: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
