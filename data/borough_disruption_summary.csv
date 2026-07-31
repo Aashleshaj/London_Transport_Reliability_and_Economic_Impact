@@ -1,10 +1,10 @@
 borough,lines_reported,disrupted_lines,average_severity,total_gva_m,disruption_rate_pct
-Brent,1,0,10.0,17411.3,0.0
+Brent,1,1,6.0,17411.3,100.0
 Camden,1,0,10.0,68061.2,0.0
 Hackney,1,0,10.0,16245.2,0.0
 Havering,1,0,10.0,11423.1,0.0
 Islington,1,1,6.0,37251.6,100.0
-Lambeth,1,0,10.0,24637.5,0.0
+Lambeth,1,1,3.0,24637.5,100.0
 Tower Hamlets,2,0,10.0,67537.4,0.0
 Waltham Forest,1,0,10.0,8795.4,0.0
-Westminster,10,5,8.2,,50.0
+Westminster,10,4,8.6,,40.0
