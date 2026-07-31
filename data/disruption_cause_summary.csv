@@ -1,4 +1,4 @@
 disruption_cause,incidents,lines_affected,avg_severity,severity_label
 Other,2,2,7.0,Moderate
-Customer Incident,1,1,6.0,Severe
+Customer Incident,1,1,9.0,Minor
 Fire Alert,1,1,6.0,Severe

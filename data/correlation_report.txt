@@ -6,5 +6,5 @@ Pearson Correlations (latest snapshot only, n=9):
   Disruption Rate % vs GVA: r=0.098, p=0.818  [not yet significant]
 
 Pearson Correlations (full history, borough x day, n=9):
-  Severity vs Borough GVA: r=0.231, p=0.582  [not yet significant]
-  Disruption Rate % vs GVA: r=-0.120, p=0.778  [not yet significant]
+  Severity vs Borough GVA: r=0.195, p=0.643  [not yet significant]
+  Disruption Rate % vs GVA: r=-0.028, p=0.948  [not yet significant]
