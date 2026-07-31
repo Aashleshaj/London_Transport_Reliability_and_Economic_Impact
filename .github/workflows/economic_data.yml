@@ -1,0 +1,38 @@
+name: Live Economic Data (ONS)
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # weekly, Monday 06:00 UTC — GVA is published annually,
+                           # no need to poll more often than this
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Fetch live ONS GVA data
+        run: python scripts/fetch_economic_data.py --force
+
+      - name: Rebuild dashboard/Power BI data
+        run: python scripts/build_dashboard_data.py
+        continue-on-error: true   # first-ever run has no TfL history yet
+
+      - name: Commit updated data back to the repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Live ONS economic data refresh: $(date -u +%Y-%m-%d)"
+          git push
