@@ -56,3 +56,22 @@ timestamp,date,modeName,name,statusSeverity,statusSeverityDescription,reason,dis
 2026-07-31T17:48:14Z,2026-07-31,tube,Waterloo & City,10,Good Service,,,
 2026-07-31T17:48:14Z,2026-07-31,overground,Weaver,10,Good Service,,,
 2026-07-31T17:48:14Z,2026-07-31,overground,Windrush,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Bakerloo,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Central,9,Minor Delays,Central Line: Minor delays between North Acton and Ealing Broadway / West Ruislip and between Leytonstone and Epping / Hainault due to train cancellations. ,Central Line: Minor delays between North Acton and Ealing Broadway / West Ruislip and between Leytonstone and Epping / Hainault due to train cancellations. ,minorDelays
+2026-07-31T19:43:09Z,2026-07-31,tube,Circle,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,District,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,dlr,DLR,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,elizabeth-line,Elizabeth line,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Hammersmith & City,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Jubilee,6,Severe Delays,"Jubilee Line: Severe delays due to an earlier fire alert at West Hampstead. Tickets are being accepted on London Buses, Mildmay line, DLR, Elizabeth line, C2C, Southeastern and Thameslink services via any reasonable route. ","Jubilee Line: Severe delays due to an earlier fire alert at West Hampstead. Tickets are being accepted on London Buses, Mildmay line, DLR, Elizabeth line, C2C, Southeastern and Thameslink services via any reasonable route. ",severeDelays
+2026-07-31T19:43:09Z,2026-07-31,overground,Liberty,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,overground,Lioness,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Metropolitan,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,overground,Mildmay,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Northern,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Piccadilly,5,Part Closure,"PICCADILLY LINE: Thursday 30 and Friday 31 July, no service between Cockfosters and Uxbridge. Trains continue to operate between Acton Town and Heathrow (all terminals), Use METROPOLITAN LINE services between Rayners Lane and Uxbridge. Replacement buses operate.","PICCADILLY LINE: Thursday 30 and Friday 31 July, no service between Cockfosters and Uxbridge. Trains continue to operate between Acton Town and Heathrow (all terminals), Use METROPOLITAN LINE services between Rayners Lane and Uxbridge. Replacement buses operate.",partClosure
+2026-07-31T19:43:09Z,2026-07-31,overground,Suffragette,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,tube,Victoria,6,Severe Delays,"Victoria Line: Severe delays due to an earlier customer incident. Tickets are being accepted on London Buses, London Overground, Great Northern, Thameslink, Greater Anglia, South Western Railway and Southeastern services. ","Victoria Line: Severe delays due to an earlier customer incident. Tickets are being accepted on London Buses, London Overground, Great Northern, Thameslink, Greater Anglia, South Western Railway and Southeastern services. ",severeDelays
+2026-07-31T19:43:09Z,2026-07-31,tube,Waterloo & City,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,overground,Weaver,10,Good Service,,,
+2026-07-31T19:43:09Z,2026-07-31,overground,Windrush,10,Good Service,,,
