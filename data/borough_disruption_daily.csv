@@ -1,10 +1,10 @@
 date,borough,lines_reported,disrupted_lines,average_severity,disruption_rate_pct,Borough,total_gva_m,gva_year
 2026-07-31,Brent,1,0,10.0,0.0,Brent,17411.3,2018.0
 2026-07-31,Camden,1,0,10.0,0.0,Camden,68061.2,2018.0
-2026-07-31,Hackney,1,1,6.0,100.0,Hackney,16245.2,2018.0
+2026-07-31,Hackney,1,1,8.0,100.0,Hackney,16245.2,2018.0
 2026-07-31,Havering,1,0,10.0,0.0,Havering,11423.1,2018.0
 2026-07-31,Islington,1,0,10.0,0.0,Islington,37251.6,2018.0
 2026-07-31,Lambeth,1,0,10.0,0.0,Lambeth,24637.5,2018.0
 2026-07-31,Tower Hamlets,2,0,10.0,0.0,Tower Hamlets,67537.4,2018.0
 2026-07-31,Waltham Forest,1,0,10.0,0.0,Waltham Forest,8795.4,2018.0
-2026-07-31,Westminster,10,3,9.0,30.0,,,
+2026-07-31,Westminster,10,9,8.25,90.0,,,
