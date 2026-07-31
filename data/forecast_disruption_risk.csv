@@ -1,10 +1,10 @@
 borough,lines_reported,disrupted_lines,average_severity,total_gva_m,disruption_rate_pct,severity_risk,rate_risk,composite_risk_score,risk_band,estimated_gva_at_risk_m
 Brent,1,0,10.0,17411.3,0.0,0.0,0.0,0.0,,0.0
 Camden,1,0,10.0,68061.2,0.0,0.0,0.0,0.0,,0.0
-Hackney,1,0,10.0,16245.2,0.0,0.0,0.0,0.0,,0.0
+Hackney,1,1,6.0,16245.2,100.0,0.4444444444444444,1.0,0.667,High,216.71
 Havering,1,0,10.0,11423.1,0.0,0.0,0.0,0.0,,0.0
-Islington,1,1,9.0,37251.6,100.0,0.1111111111111111,1.0,0.467,Medium,347.93
+Islington,1,0,10.0,37251.6,0.0,0.0,0.0,0.0,,0.0
 Lambeth,1,0,10.0,24637.5,0.0,0.0,0.0,0.0,,0.0
 Tower Hamlets,2,0,10.0,67537.4,0.0,0.0,0.0,0.0,,0.0
 Waltham Forest,1,0,10.0,8795.4,0.0,0.0,0.0,0.0,,0.0
-Westminster,10,1,9.5,,10.0,0.05555555555555555,0.1,0.073,Very Low,
+Westminster,10,3,9.0,,30.0,0.1111111111111111,0.3,0.187,Very Low,

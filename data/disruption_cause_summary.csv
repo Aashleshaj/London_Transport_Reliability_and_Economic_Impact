@@ -1,2 +1,3 @@
 disruption_cause,incidents,lines_affected,avg_severity,severity_label
-Other,2,2,7.0,Moderate
+Other,3,3,6.666666666666667,Moderate
+Customer Incident,1,1,6.0,Severe
