@@ -152,7 +152,7 @@ with tab2:
             )
             st.plotly_chart(fig4, use_container_width=True)
 
-    st.subheader("Disruption Detail (service_disturption.csv)")
+    st.subheader("Disruption Detail (service_disruption.csv)")
     if not filt_disruption.empty:
         cols = ["name", "modeName", "severity_label", "disruption_cause",
                 "affected_section", "reason", "borough"]

@@ -1,6 +1,6 @@
 """
 data_integration.py  –  London Transport Reliability & Economic Impact
-Merges ALL transport sources (Status.csv, Status_all.csv, service_disturption.csv)
+Merges ALL transport sources (Status.csv, Status_all.csv, service_disruption.csv)
 with economic data and produces Power-BI-ready flat files.
 """
 from pathlib import Path
@@ -13,7 +13,7 @@ DATA_DIR = ROOT / "data"
 
 TRANSPORT_PATH   = DATA_DIR / "Status.csv"            # tube-only snapshot (used before)
 STATUS_ALL_PATH  = DATA_DIR / "Status_all.csv"        # tube + DLR + Elizabeth + Overground
-DISRUPTION_PATH  = DATA_DIR / "service_disturption.csv"  # detailed disruptions with reasons
+DISRUPTION_PATH  = DATA_DIR / "service_disruption.csv"  # detailed disruptions with reasons
 ECONOMIC_PATH    = DATA_DIR / "economic_data.csv"
 
 OUT_MERGED       = DATA_DIR / "merged_transport_economic.csv"
@@ -109,7 +109,7 @@ def load_transport_snapshot(path: Path, label: str) -> pd.DataFrame:
 
 def load_disruption_detail(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path)
-    df["source"] = "service_disturption"
+    df["source"] = "service_disruption"
     df["borough"] = df["name"].map(LINE_TO_BOROUGH).fillna("Unknown")
     df["severity_label"] = df["statusSeverity"].map(SEVERITY_LABELS).fillna("Unknown")
     df["is_disrupted"] = df["statusSeverity"] < 10
