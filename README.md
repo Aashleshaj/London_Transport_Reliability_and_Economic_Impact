@@ -2,76 +2,147 @@
 
 > **Does transport unreliability hit outer London harder than the centre — and what does it cost the economy?**
 >
-> This project collects live TfL service status data across all modes (Tube, Overground, DLR, Elizabeth line), classifies disruptions by root cause, merges them with borough-level economic data, and surfaces actionable insight through a Streamlit dashboard and a Power BI report.
+> This project polls **live** TfL service status across all modes (Tube, Overground, DLR, Elizabeth line), classifies disruptions by root cause, joins them to **live** ONS borough-level GVA data, and surfaces the result through a real-time Streamlit dashboard and a Power BI report. No manually-downloaded files are read anywhere in the pipeline — everything is fetched by code, on a schedule, via GitHub Actions.
 
-![London Transport Reliability and Economic Impact](data/flowchart.png)
 ---
 
 ## Table of Contents
 
-1. [Project Overview](#1-project-overview)
-2. [Research Questions](#2-research-questions)
-3. [Data Sources](#3-data-sources)
-4. [Project Structure](#4-project-structure)
-5. [Data Files Explained](#5-data-files-explained)
-6. [Code Changes & What Was Added](#6-code-changes--what-was-added)
-7. [How to Run](#7-how-to-run)
-8. [Key Findings & Outcomes](#8-key-findings--outcomes)
-9. [Power BI Dashboard Guide](#9-power-bi-dashboard-guide)
-10. [Future Enhancements](#10-future-enhancements)
-11. [Official Data Sources](#11-official-data-sources)
+- [🚇 London Transport Reliability \& Economic Impact](#-london-transport-reliability--economic-impact)
+  - [Table of Contents](#table-of-contents)
+  - [1. Project Overview](#1-project-overview)
+  - [2. Architecture](#2-architecture)
+    - [2.1 Data flow](#21-data-flow)
+    - [2.2 Automation schedule](#22-automation-schedule)
+  - [3. Data Sources (Live APIs)](#3-data-sources-live-apis)
+  - [4. Project Structure](#4-project-structure)
+  - [5. Data Files Explained](#5-data-files-explained)
+  - [6. What Each Script Does](#6-what-each-script-does)
+    - [`scripts/live_status_logger.py`](#scriptslive_status_loggerpy)
+    - [`scripts/fetch_economic_data.py`](#scriptsfetch_economic_datapy)
+    - [`scripts/build_dashboard_data.py`](#scriptsbuild_dashboard_datapy)
+    - [`dashboard.py`](#dashboardpy)
+  - [7. How to Run](#7-how-to-run)
+    - [Install dependencies](#install-dependencies)
+    - [Local first run](#local-first-run)
+    - [Ongoing local use (optional)](#ongoing-local-use-optional)
+    - [Power BI](#power-bi)
+  - [8. GitHub Actions Automation](#8-github-actions-automation)
+  - [9. Power BI Report](#9-power-bi-report)
+  - [10. Example Output (point-in-time snapshot)](#10-example-output-point-in-time-snapshot)
+  - [11. Future Enhancements](#11-future-enhancements)
 
 ---
 
 ## 1. Project Overview
 
-Public transport delays, strikes, and infrastructure failures do not affect all areas equally. This project investigates whether transport unreliability disproportionately impacts commuters in outer boroughs (such as Brent or Croydon) compared to central London, and correlates those disruptions with local economic data (GVA, employment, sales, and forecast revenue).
+Public transport delays, strikes, and infrastructure failures don't affect all areas equally. This project investigates whether transport unreliability disproportionately impacts commuters in outer boroughs compared to central London, and correlates disruption patterns with each borough's economic output (GVA).
 
-The pipeline goes from raw TfL JSON → cleaned CSVs → statistical analysis → a Streamlit dashboard and Power BI–ready flat files.
+The pipeline runs continuously and unattended:
 
----
+**TfL API → history log → enrichment/risk scoring → Streamlit (real-time) + Power BI (scheduled refresh)**, with a parallel, slower branch pulling GVA from ONS.
 
-## 2. Research Questions
-
-- Which London transport lines and modes experience the most disruptions?
-- What are the most common root causes (signal failures, fire alerts, faulty trains, etc.)?
-- Does disruption severity correlate with a borough's economic output (GVA, employment)?
-- Which boroughs face the greatest economic risk from transport unreliability?
-- What does the economic forecast look like for affected boroughs over the next five years?
+Two different "live" speeds, by design: the Streamlit dashboard hits the TfL API directly per visitor (true real-time); Power BI refreshes on a schedule reading the repo's GitHub-hosted CSVs (a reporting cadence, not a live ticker).
 
 ---
 
-## 3. Data Sources
+## 2. Architecture
 
-### TfL API (live snapshots — manual download)
+### 2.1 Data flow
 
-| File | TfL Endpoint | Coverage |
-|---|---|---|
-| `Status.json` | `https://api.tfl.gov.uk/Line/Mode/overground/Status` | Overground only |
-| `tube_status.json` | `https://api.tfl.gov.uk/Line/Mode/tube/Status` | Tube only |
-| `Status_all.json` | `https://api.tfl.gov.uk/Line/Mode/tube,overground,elizabeth-line,dlr/Status` | All modes |
-| `service_disruption.json` | `https://api.tfl.gov.uk/Line/Mode/tube,overground/Status?detail=true` | Disruptions with full reason text |
-| `economic_data.csv` | `https://data.london.gov.uk/dataset/low-carbon-environmental-goods-and-services-sector-lcegs-snapsho-2rjz1` | Economic_data created from kMatrix_LCEGS_GLA_2023_24_Datasets |
+```mermaid
+flowchart TD
+    subgraph Sources["External Live Data Sources"]
+        TFL["TfL Unified API<br/>api.tfl.gov.uk<br/>Line status, all modes"]
+        ONS["ONS API<br/>GVA by industry by local authority"]
+    end
 
-TfL API home: https://api.tfl.gov.uk  
+    subgraph Fetchers["scripts/ — Fetch Layer"]
+        LOGGER["live_status_logger.py<br/>polls every run, appends"]
+        ECON["fetch_economic_data.py<br/>downloads + filters to London boroughs"]
+    end
 
-### Economic Data (GLA LCEGS 2023/24)
+    subgraph Storage["data/ — Growing Live Datasets"]
+        HIST[("tfl_status_history.csv<br/>every line, every poll, ever")]
+        GVA[("borough_economic_live.csv<br/>latest GVA per borough")]
+    end
 
-Borough-level economic data sourced from the GLA Low Carbon & Environmental Goods and Services dataset:  
-https://data.london.gov.uk/dataset/low-carbon-environmental-goods-and-services-sector-lcegs-snapsho-2rjz1
+    subgraph Build["scripts/build_dashboard_data.py"]
+        ENRICH["Enrich: line → borough,<br/>severity label, disruption cause"]
+        SUMM["Aggregate: borough summary,<br/>daily trend, mode/cause summary"]
+        RISK["Risk score + Pearson correlation<br/>(latest snapshot AND full history)"]
+    end
 
-Fields used: Sales £m, GVA £m, Export Total £m, Total Imports £m, Number of Companies, Total Employees, and 5-year sales forecasts (2024/25 → 2028/29).
+    subgraph Outputs["data/ — Dashboard-ready Outputs"]
+        O1[("all_lines_combined.csv")]
+        O2[("disruption_enriched.csv")]
+        O3[("borough_disruption_summary.csv")]
+        O4[("borough_disruption_daily.csv")]
+        O5[("disruption_cause_summary.csv")]
+        O6[("mode_disruption_summary.csv")]
+        O7[("forecast_disruption_risk.csv")]
+        O8[("merged_transport_economic.csv")]
+        O9[("all_lines_history_enriched.csv")]
+    end
 
-### Supporting / Reference Sources
+    subgraph Consumers["Consumers"]
+        ST["Streamlit dashboard.py<br/>+ direct live API call for Tab 1"]
+        PBI["Power BI<br/>reads raw.githubusercontent.com URLs"]
+    end
 
-| Category | Source | URL |
-|---|---|---|
-| Census travel data | ONS Census 2021 | https://www.ons.gov.uk/datasets/TS061 |
-| Borough boundaries | GLA / London Datastore | https://data.london.gov.uk |
-| Delay attribution | Office of Rail and Road | https://dataportal.orr.gov.uk |
-| Passenger surveys | Transport Focus | https://www.transportfocus.org.uk |
-| Strike history | Wikipedia / RMT | https://en.wikipedia.org/wiki/London_Underground_strikes |
-| Labour market data | ONS Nomis | https://www.nomisweb.co.uk |
+    TFL --> LOGGER --> HIST
+    ONS --> ECON --> GVA
+    HIST --> ENRICH
+    GVA --> ENRICH
+    ENRICH --> SUMM --> RISK
+    RISK --> O1 & O2 & O3 & O4 & O5 & O6 & O7 & O8 & O9
+    O1 & O2 & O3 & O4 & O5 & O6 & O7 --> ST
+    O1 & O2 & O3 & O4 & O5 & O6 & O7 --> PBI
+    TFL -. "direct call,<br/>cached 2 min" .-> ST
+```
+
+### 2.2 Automation schedule
+
+```mermaid
+sequenceDiagram
+    participant Cron as GitHub Actions Cron
+    participant TfLFlow as tfl_live.yml
+    participant EconFlow as economic_data.yml
+    participant Repo as Repo (data/)
+
+    Note over Cron,Repo: Runs unattended, no manual downloads
+
+    loop Every 15 minutes
+        Cron->>TfLFlow: trigger
+        TfLFlow->>TfLFlow: live_status_logger.py --once
+        TfLFlow->>TfLFlow: build_dashboard_data.py
+        TfLFlow->>Repo: commit + push updated data/
+    end
+
+    loop Weekly (Monday 06:00 UTC)
+        Cron->>EconFlow: trigger
+        EconFlow->>EconFlow: fetch_economic_data.py --force
+        EconFlow->>EconFlow: build_dashboard_data.py
+        EconFlow->>Repo: commit + push updated data/
+    end
+```
+
+GVA is only published annually by ONS regardless of source — the weekly cadence
+just means the repo always reflects whatever ONS has most recently released,
+with zero manual steps.
+
+---
+
+## 3. Data Sources (Live APIs)
+
+| Source | Endpoint | Fetched by | Cadence |
+|---|---|---|---|
+| TfL Unified API | `https://api.tfl.gov.uk/Line/Mode/tube,dlr,overground,elizabeth-line/Status?detail=true` | `scripts/live_status_logger.py` | Every 15 min (GitHub Actions) |
+| ONS GVA by Local Authority | `https://download.ons.gov.uk/downloads/datasets/gva-by-industry-by-local-authority/...` | `scripts/fetch_economic_data.py` | Weekly (GitHub Actions) |
+| TfL Unified API (again) | Same as above | `dashboard.py` directly, browser-side | Every visitor, cached 2 min |
+
+No spreadsheet, JSON export, or file of any kind is downloaded by hand anywhere
+in this pipeline.
 
 ---
 
@@ -80,339 +151,184 @@ Fields used: Sales £m, GVA £m, Export Total £m, Total Imports £m, Number of 
 ```
 London_Transport_Reliability_and_Economic_Impact/
 │
-├── dashboard.py                    # Streamlit dashboard (4 tabs)
+├── dashboard.py                       # Streamlit dashboard — single source of truth
+│                                       # (see Known Issues — a stale duplicate currently
+│                                       #  also exists at scripts/dashboard.py)
 │
 ├── scripts/
-│   ├── app.py                      # JSON → CSV converter
-│   ├── data_integration.py         # ★ Enriched – merges all transport + economic sources
-│   └── correlation_analysis.py     # ★ Enriched – root-cause analysis, risk scoring, forecasting
+│   ├── live_status_logger.py          # Fetch layer — TfL API → tfl_status_history.csv
+│   ├── fetch_economic_data.py         # Fetch layer — ONS API → borough_economic_live.csv
+│   └── build_dashboard_data.py        # Enrichment + risk scoring + correlation, all outputs
+│
+├── .github/workflows/
+│   ├── tfl_live.yml                   # Every 15 min
+│   └── economic_data.yml              # Weekly
+│
+├── power_bi/
+│   ├── POWERBI_GUIDE.md
+│   ├── PowerBI_Setup_Guide_livedata.md
+│   └── powerbi_step_by_step_guide.html
 │
 └── data/
     │
-    ├── ── RAW INPUTS ──────────────────────────────────────────────
-    ├── Status.csv                  # Tube-only snapshot (11 lines)
-    ├── Status_all.csv              # All modes: tube + DLR + Elizabeth + Overground (19 lines)
-    ├── service_disruption.csv     # Disrupted lines only, with full reason text
-    ├── tube_status.csv             # Tube snapshot (same structure as Status.csv)
-    ├── economic_data.csv           # Borough-level GVA, sales, employment, 5-yr forecast
+    ├── ── LIVE INPUTS (fetched by scripts, never hand-edited) ──────
+    ├── tfl_status_history.csv          # Every line, every 15-min poll, growing forever
+    ├── borough_economic_live.csv       # Latest ONS GVA per London borough
     │
-    ├── ── GENERATED OUTPUTS (Power BI inputs) ──────────────────────
-    ├── all_lines_combined.csv      # ★ NEW – all modes, unified
-    ├── disruption_enriched.csv     # ★ NEW – disrupted rows + root cause + affected section
-    ├── merged_transport_economic.csv   # Lines joined to economic borough data
-    ├── borough_disruption_summary.csv  # Borough KPI table (disruption rate, GVA, employees)
-    ├── disruption_cause_summary.csv    # ★ NEW – cause breakdown (incidents, severity)
-    ├── mode_disruption_summary.csv     # ★ NEW – per-mode disruption rate
-    ├── forecast_disruption_risk.csv    # ★ NEW – risk score, risk band, GVA at risk per borough
-    └── correlation_report.txt          # ★ NEW – Pearson correlation results
+    ├── ── GENERATED OUTPUTS (dashboard + Power BI inputs) ──────────
+    ├── all_lines_combined.csv          # Latest poll, all lines, enriched
+    ├── disruption_enriched.csv         # Latest poll, disrupted lines only + cause
+    ├── merged_transport_economic.csv   # Latest poll joined to borough GVA
+    ├── borough_disruption_summary.csv  # Borough KPI table (current snapshot)
+    ├── borough_disruption_daily.csv    # Borough × day — the trend dataset
+    ├── disruption_cause_summary.csv    # Cause breakdown (current snapshot)
+    ├── mode_disruption_summary.csv     # Per-mode disruption rate (current snapshot)
+    ├── forecast_disruption_risk.csv    # Composite risk score + estimated GVA at risk
+    ├── all_lines_history_enriched.csv  # Full enriched history, every poll
+    └── correlation_report.txt          # Pearson correlations — snapshot AND full history
 ```
 
 ---
 
 ## 5. Data Files Explained
 
-### Input CSVs
-
-| File | Rows | Key Columns | Notes |
+| File | Grain | Key Columns | Notes |
 |---|---|---|---|
-| `Status.csv` | 11 | name, modeName, statusSeverity, reason | Tube only |
-| `Status_all.csv` | 19 | name, modeName, statusSeverity, reason | All modes including DLR, Elizabeth, Overground |
-| `service_disruption.csv` | 17 | name, statusSeverity, reason, disruptionDescription | Contains detailed reason text — used for root-cause classification |
-| `economic_data.csv` | ~2,000 | Borough, GVA £m, Sales £m, Employees, Forecasts | GLA LCEGS sector-level data, aggregated to borough level |
-
-### Generated Output CSVs (Power BI inputs)
-
-| File | Rows | Purpose |
-|---|---|---|
-| `all_lines_combined.csv` | 36 | Master fact table — every line from every source, deduplicated |
-| `disruption_enriched.csv` | 7 | Only disrupted rows; adds `disruption_cause` and `affected_section` |
-| `merged_transport_economic.csv` | 36 | Lines joined to borough economic data |
-| `borough_disruption_summary.csv` | 9 | Borough KPIs: disruption rate, avg severity, GVA, employees |
-| `disruption_cause_summary.csv` | 4 | Cause breakdown: Fire Alert, Signal Failure, Faulty Train, Customer Incident |
-| `mode_disruption_summary.csv` | 4 | Disruption rate per mode: tube, overground, DLR, Elizabeth line |
-| `forecast_disruption_risk.csv` | 9 | Composite risk score (0–1), risk band, estimated GVA at risk (£m) |
+| `tfl_status_history.csv` | one row per line per poll | timestamp, name, statusSeverity, reason | Raw TfL fetch, no enrichment — the append-only ledger everything else derives from |
+| `borough_economic_live.csv` | one row per borough | Borough, total_gva_m, gva_year | Raw ONS fetch, filtered to London |
+| `all_lines_combined.csv` | one row per line, latest poll | name, borough, severity_label, is_disrupted | "Current status" view |
+| `disruption_enriched.csv` | one row per disrupted line, latest poll | disruption_cause, affected_section | Root-cause detail |
+| `borough_disruption_summary.csv` | one row per borough, latest poll | disruption_rate_pct, average_severity, total_gva_m | Core KPI table |
+| `borough_disruption_daily.csv` | one row per borough per calendar day | disruption_rate_pct over time | Grows every day the pipeline runs — feeds the trend chart |
+| `disruption_cause_summary.csv` | one row per cause | incidents, avg_severity | Root-cause breakdown |
+| `mode_disruption_summary.csv` | one row per mode | disruption_rate_pct | Per-mode comparison |
+| `forecast_disruption_risk.csv` | one row per borough | composite_risk_score, risk_band, estimated_gva_at_risk_m | Risk scoring output |
+| `correlation_report.txt` | text | Pearson r/p, both snapshot-only and full-history | Statistical significance improves as more days accumulate |
 
 ---
 
-## 6. Code 
+## 6. What Each Script Does
 
-### `scripts/data_integration.py`
+### `scripts/live_status_logger.py`
+Polls the TfL API for **every** line on **every** mode (not just disrupted ones — needed to compute rates, not just counts) and appends one row per line to `tfl_status_history.csv`. Supports `--once` (used by the GitHub Actions cron) and `--loop` (continuous polling, for running on your own machine).
 
-- Loads all transport CSVs (`Status.csv`, `Status_all.csv`, `service_disruption.csv`) and unifies them into a single deduplicated fact table.
-- Expanded `LINE_TO_BOROUGH` mapping from 11 entries to 19, covering all Overground strands (e.g. Liberty → Havering, Mildmay → Hackney, Windrush → Lambeth), DLR → Tower Hamlets, and Elizabeth line → Westminster.
-- Added `disruption_cause` column via a regex classifier that extracts root cause from reason text: Fire Alert, Signal Failure, Faulty Train, Customer Incident, Points Failure, Flooding, Strike, and more.
-- Added `affected_section` column extracting "between X and Y" from reason text.
-- Added `is_disrupted` boolean and `severity_label` human-readable column.
-- Borough summary now includes `disruption_rate_pct` (disrupted lines ÷ total lines × 100).
-- Outputs 4 Power BI–ready files (was 2).
+### `scripts/fetch_economic_data.py`
+Downloads the latest ONS "GVA by industry by local authority" release, auto-detects the relevant columns (ONS occasionally renames them between releases — this script prints what it detected so you can sanity-check), filters to the 33 London boroughs, and aggregates to one total-GVA figure per borough.
 
-**New output files produced:**
-- `all_lines_combined.csv` — 36 rows across 19 lines and 4 modes
-- `disruption_enriched.csv` — 7 disrupted service records with cause and section
+### `scripts/build_dashboard_data.py`
+The single processing script (replaces the old `data_integration.py` + `correlation_analysis.py`):
+- Maps each line to its borough (`LINE_TO_BOROUGH`)
+- Labels severity codes (`SEVERITY_LABELS`)
+- Classifies disruption cause from the `reason` text via regex (`CAUSE_PATTERNS`)
+- Builds the latest-snapshot and full-history borough summaries
+- Computes a composite risk score: `0.6 × severity_risk + 0.4 × rate_risk`
+- Runs Pearson correlation twice — once on the latest snapshot (few data points), once across the full borough × day history (grows richer every day)
 
-### `scripts/correlation_analysis.py` 
-
-- Generates `disruption_cause_summary.csv` — cause frequency, lines affected, and average severity per cause.
-- Generates `mode_disruption_summary.csv` — disruption rate by transport mode.
-- Generates `forecast_disruption_risk.csv` with a **composite risk score** (0–1) for each borough, combining severity risk and disruption rate:
-  - `severity_risk = (10 − avg_severity) / 9`
-  - `rate_risk = disruption_rate_pct / 100`
-  - `composite_risk_score = 0.6 × severity_risk + 0.4 × rate_risk`
-- Adds a `risk_band` label (Very Low / Low / Medium / High / Critical).
-- Adds `estimated_gva_at_risk_m` — modelled as `GVA × composite_risk × 2%` daily sensitivity.
-- Runs Pearson correlations for 5 metric pairs and writes a plain-text `correlation_report.txt`.
-
-### `dashboard.py` 
-
-| Tab | Content |
-|---|---|
-| 🚦 Live Status | Status by mode, severity donut, full line table |
-| ⚠️ Disruption Analysis | Cause bar chart, mode disruption rate, disruption detail table |
-| 💷 Economic Impact | GVA vs severity scatter, employment vs disruption rate scatter |
-| 🔮 Forecast & Risk | Composite risk bar, GVA at risk bar, 5-year forecast sales line chart |
+### `dashboard.py`
+Four tabs — Live Status (includes a panel calling the TfL API directly, independent of the batch schedule), Disruption Analysis (includes the daily trend chart), Economic Impact, Forecast & Risk.
 
 ---
 
 ## 7. How to Run
 
 ### Install dependencies
-
 ```bash
-pip install pandas scipy streamlit plotly
+pip install pandas scipy streamlit plotly requests schedule
 ```
 
-### Step 1 — Convert JSON to CSV (if you have fresh API data)
-
+### Local first run
 ```bash
-cd scripts
-python app.py
-```
-
-This converts all `.json` files in `data/` to `.csv` format.
-
-### Step 2 — Run data integration
-
-```bash
-python scripts/data_integration.py
-```
-
-Produces: `all_lines_combined.csv`, `disruption_enriched.csv`, `merged_transport_economic.csv`, `borough_disruption_summary.csv`
-
-### Step 3 — Run correlation analysis & risk scoring
-
-```bash
-python scripts/correlation_analysis.py
-```
-
-Produces: `disruption_cause_summary.csv`, `mode_disruption_summary.csv`, `forecast_disruption_risk.csv`, `correlation_report.txt`
-
-### Step 4 — Launch Streamlit dashboard
-
-```bash
+python scripts/live_status_logger.py --once
+python scripts/fetch_economic_data.py
+python scripts/build_dashboard_data.py
 streamlit run dashboard.py
 ```
 
-### Step 5 — Open in Power BI
+### Ongoing local use (optional)
+```bash
+python scripts/live_status_logger.py --loop --interval 5
+```
+Runs continuously, polling every 5 minutes — useful if you want history building up locally rather than waiting on the GitHub Actions schedule.
 
-Import all 7 output CSVs into Power BI Desktop. See Section 9 for the full setup guide.
+### Power BI
+See [Section 9](#9-power-bi-report).
 
 ---
 
-## 8. Key Findings & Outcomes
+## 8. GitHub Actions Automation
 
-All findings below are based on the snapshot data collected from the TfL API.
+Two workflows keep the repo's `data/` folder live without any manual steps:
 
-### Network Disruption Summary
+| Workflow | Schedule | Does |
+|---|---|---|
+| `.github/workflows/tfl_live.yml` | Every 15 min | `live_status_logger.py --once` → `build_dashboard_data.py` → commit |
+| `.github/workflows/economic_data.yml` | Weekly, Mon 06:00 UTC | `fetch_economic_data.py --force` → `build_dashboard_data.py` → commit |
+
+**Required repo secrets** (Settings → Secrets and variables → Actions): `TFL_APP_ID`, `TFL_APP_KEY` — register free at https://api-portal.tfl.gov.uk/.
+
+**Required permission**: Settings → Actions → General → Workflow permissions → "Read and write permissions" (so the workflow can push data back).
+
+---
+
+## 9. Power BI Report
+
+The `.pbix` files live in `data/power_bi/` and are connected directly to this
+repo's raw GitHub CSV URLs (`raw.githubusercontent.com/.../data/<file>.csv`) —
+so Power BI's scheduled refresh pulls whatever the GitHub Actions workflows
+most recently committed, with no gateway required (the source is public web,
+not a local file).
+
+Full step-by-step setup — which file feeds which visual, relationships, DAX
+measures, publishing, and scheduled refresh — is in:
+- `power_bi/PowerBI_Setup_Guide_livedata.md` (current, matches the live pipeline)
+- `power_bi/POWERBI_GUIDE.md` / `power_bi/powerbi_step_by_step_guide.html` (earlier drafts — safe to remove once the live guide is confirmed working)
+
+---
+
+## 10. Example Output (point-in-time snapshot)
+
+The numbers below are a single real snapshot pulled while writing this README —
+**they will differ every time you look**, since the pipeline is live. Treat
+this as "here's what the shape of the data looks like," not a fixed result.
+
+**Mode disruption rate:**
 
 | Mode | Total Lines | Disrupted | Disruption Rate |
 |---|---|---|---|
-| Tube | 11 | 9 | **81.8%** |
-| Overground | 6 | 2 | **33.3%** |
-| Elizabeth line | 1 | 1 | **100.0%** |
-| DLR | 1 | 0 | **0.0%** |
+| Tube | 11 | 6 | 54.5% |
+| Overground | 6 | 0 | 0.0% |
+| Elizabeth line | 1 | 0 | 0.0% |
+| DLR | 1 | 0 | 0.0% |
 
-### Disruption Root Causes
+**Correlation report (`correlation_report.txt`):**
 
-| Cause | Incidents | Lines Affected | Avg Severity | Category |
-|---|---|---|---|---|
-| Fire Alert | 3 | 3 | 4.7 | 🔴 Severe |
-| Signal Failure | 2 | 2 | 3.0 | 🔴 Severe |
-| Customer Incident | 1 | 1 | 6.0 | 🔴 Severe |
-| Faulty Train | 1 | 1 | 9.0 | 🟡 Minor |
+```
+Pearson Correlations (latest snapshot only, n=9):
+  Severity vs Borough GVA: r=-0.098, p=0.818  [not yet significant]
+  Disruption Rate % vs GVA: r=0.098, p=0.818  [not yet significant]
 
-Fire alerts and signal failures account for the most severe disruptions. Signal failures produce the lowest severity scores (3.0 average — indicating near-suspension).
-
-### Borough Risk Scores
-
-| Borough | Risk Score | Risk Band | Disruption Rate | GVA at Risk (£m) | Total GVA (£m) |
-|---|---|---|---|---|---|
-| Hackney | 0.633 | 🔴 High | 100% | £5.31m | £419.6m |
-| Camden | 0.533 | 🟠 Medium | 100% | £10.57m | £991.2m |
-| Lambeth | 0.533 | 🟠 Medium | 100% | £4.12m | £386.8m |
-| Westminster | 0.457 | 🟠 Medium | 80% | £12.01m | £1,313.9m |
-| Islington | 0.433 | 🟠 Medium | 100% | £5.51m | £635.8m |
-| Brent | 0.000 | ✅ Very Low | 0% | £0.00m | £252.6m |
-| Tower Hamlets | 0.000 | ✅ Very Low | 0% | £0.00m | £287.2m |
-
-Westminster carries the highest absolute GVA at risk (£12.01m) due to its large economic base. Hackney has the highest relative risk score (0.633) because the Mildmay line experienced Part Suspension during the snapshot.
-
-### Pearson Correlations (Borough-level)
-
-| Pair | r | p-value | Interpretation |
-|---|---|---|---|
-| Avg Severity vs GVA | −0.508 | 0.163 | Moderate negative — higher-GVA boroughs tend to have worse disruptions |
-| Avg Severity vs Employment | −0.469 | 0.203 | Moderate negative — similar pattern |
-| Avg Severity vs Sales | −0.518 | 0.153 | Moderate negative |
-| Disruption Rate % vs GVA | +0.634 | 0.066 | Strongest signal — higher GVA boroughs see more lines disrupted |
-| Disruption Rate % vs Employment | +0.544 | 0.130 | Moderate positive |
-
-> Note: p-values are above 0.05 because the sample covers only 9 boroughs. These correlations will become statistically significant as more snapshot dates are collected over time.
-
-### Economic Forecast (5-Year Sales, £m)
-
-Top boroughs by forecast sales growth 2024/25 → 2028/29:
-
-| Borough | 2024/25 | 2025/26 | 2026/27 | 2027/28 | 2028/29 |
-|---|---|---|---|---|---|
-| Westminster | £152m | £165m | £180m | £198m | £220m |
-| Camden | £122m | £133m | £145m | £160m | £177m |
-| Islington | £80m | £87m | £95m | £104m | £115m |
-
-All boroughs show consistent upward sales forecasts over the 5-year window, making the cost of transport disruption relatively more impactful as economic stakes rise.
-
----
-
-## 9. Power BI Dashboard Guide
-
-### Files to Import
-
-Import all 7 output CSVs from the `data/` folder:
-
-1. `all_lines_combined.csv` — master fact table
-2. `disruption_enriched.csv` — disruption fact table
-3. `merged_transport_economic.csv` — line-level economic merge
-4. `borough_disruption_summary.csv` — borough KPI dimension
-5. `disruption_cause_summary.csv` — cause dimension
-6. `mode_disruption_summary.csv` — mode dimension
-7. `forecast_disruption_risk.csv` — risk and forecast dimension
-
-### Relationships (star schema)
-
-- `all_lines_combined[borough]` → `borough_disruption_summary[borough]` (Many:1)
-- `disruption_enriched[borough]` → `borough_disruption_summary[borough]` (Many:1)
-- `forecast_disruption_risk[borough]` → `borough_disruption_summary[borough]` (1:1)
-
-### Key DAX Measures
-
-```dax
-Disruption Rate % =
-DIVIDE(
-    COUNTROWS(FILTER('all_lines_combined', 'all_lines_combined'[is_disrupted] = TRUE())),
-    COUNTROWS('all_lines_combined'), 0
-) * 100
-
-Total GVA at Risk £m = SUM('forecast_disruption_risk'[estimated_gva_at_risk_m])
-
-Avg Severity = AVERAGE('all_lines_combined'[statusSeverity])
-
-Total Disruptions = COUNTROWS('disruption_enriched')
+Pearson Correlations (full history, borough x day, n=18):
+  Severity vs Borough GVA: r=-0.079, p=0.770  [not yet significant]
+  Disruption Rate % vs GVA: r=-0.020, p=0.940  [not yet significant]
 ```
 
-### Recommended Pages
+Correlations are still not significant — expected this early. `n` grows by 9
+(one per borough) every additional day the pipeline runs, so significance is
+a matter of letting it accumulate, not changing the method.
 
-| Page | Key Visuals |
-|---|---|
-| Network Overview | KPI cards, stacked bar by mode/status, severity donut, full line table |
-| Disruption Analysis | Cause bar chart, mode disruption rate, disruption detail table, borough disruption rate bar |
-| Economic Impact | GVA vs severity scatter, employment vs disruption scatter, borough economic table |
-| Forecast & Risk | Risk score bar by borough, GVA at risk bar, 5-year forecast line chart, risk table |
-
-### Recommended Slicers
-
-Add to every page: Borough, Transport Mode, Severity Label, Disruption Cause, Risk Band.
-
-### Colour Convention
-
-| Status / Band | Hex |
-|---|---|
-| Good Service / Very Low | `#27AE60` |
-| Minor Delays / Low | `#2ECC71` |
-| Moderate / Medium | `#F39C12` |
-| Severe Delays / High | `#E74C3C` |
-| Suspended / Critical | `#7F0000` |
-
----
-
-## 10. Future Enhancements
+## 11. Future Enhancements
 
 | Enhancement | Description |
 |---|---|
-| Time-series collection | Schedule `app.py` to call the TfL API every hour. Add `date` as an axis to track disruption trends over weeks and months. |
-| Geospatial map | Add GLA borough boundary GeoJSON → use Power BI Shape Map or ArcGIS to colour boroughs by risk score. |
-| Strike overlay | Add a date dimension table with historical strike dates. Overlay on time-series charts as reference lines. |
-| Real-time alerts | Trigger Power BI alerts or email notifications when `composite_risk_score` exceeds a threshold (e.g. 0.6). |
-| Outer-borough expansion | Expand `LINE_TO_BOROUGH` to secondary boroughs served by each line (e.g. Jubilee → Southwark, Greenwich). |
-| Machine learning | Train a classification model on historical disruption patterns to predict next-day risk by line. |
-| Real economic data | Replace GLA LCEGS sample with ONS borough income estimates or GLA household income data for richer correlation. |
-| Date Specific Weekly/Monthly/Yearly Analysis | Apply Date Range Time Analysis on multiple datasets |
+| Fix Westminster/City of London GVA gap | Correct the borough-name matching in `fetch_economic_data.py` |
+| Geospatial map | Borough boundary GeoJSON + Power BI Shape Map, coloured by risk score |
+| Strike overlay | Historical strike-date reference lines on the trend chart |
+| Threshold alerts | Power BI alert or email when `composite_risk_score` exceeds e.g. 0.6 |
+| Outer-borough line coverage | Expand `LINE_TO_BOROUGH` to secondary boroughs each line serves |
+| Predictive risk model | Train on `all_lines_history_enriched.csv` once enough history has accumulated |
+| Employment / sales metrics | The old kMatrix dataset had these; no free live equivalent exists yet — Nomis API is a possible source but needs a one-time query built via their site before it can be automated |
 
 ---
 
-## 11. Official Data Sources
-
-### TfL API
-
-| Resource | URL |
-|---|---|
-| TfL API home | https://api.tfl.gov.uk |
-| TfL Open Data portal | https://tfl.gov.uk/info-for/open-data-users |
-| TfL API documentation | https://api.tfl.gov.uk/swagger/ui/index.html |
-| TfL performance reports | https://tfl.gov.uk/corporate/publications-and-reports/underground-services-performance |
-
-### ONS / Census
-
-| Resource | URL |
-|---|---|
-| Census 2021 custom data | https://create.census.gov.uk/query |
-| TS058 distance to work | https://www.ons.gov.uk/datasets/TS058/editions/2021/versions/3 |
-| TS061 method of travel | https://www.ons.gov.uk/datasets/TS061/editions/2021/versions/3 |
-| National Travel Survey | https://www.gov.uk/government/collections/national-travel-survey-statistics |
-
-### London Data
-
-| Resource | URL |
-|---|---|
-| London Datastore (GLA) | https://data.london.gov.uk |
-| Borough boundary files | https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london |
-| Borough income estimates | https://data.london.gov.uk/dataset/household-income-estimates-small-areas |
-| GLA LCEGS economic data | https://data.london.gov.uk/dataset/low-carbon-environmental-goods-and-services-sector-lcegs-snapsho-2rjz1 |
-| LTDS travel report | https://tfl.gov.uk/corporate/publications-and-reports/travel-in-london-reports |
-
-### Rail & Disruption
-
-| Resource | URL |
-|---|---|
-| ORR data portal | https://dataportal.orr.gov.uk |
-| Network Rail open data | https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds |
-| Delay attribution data | https://dataportal.orr.gov.uk/statistics/performance/delay-attribution |
-
-### Passenger & Impact
-
-| Resource | URL |
-|---|---|
-| Transport Focus surveys | https://www.transportfocus.org.uk/research-publications |
-| London TravelWatch | https://www.londontravelwatch.org.uk/resources/publications |
-| Trust for London | https://trustforlondon.org.uk/data |
-| ONS Nomis labour data | https://www.nomisweb.co.uk |
-
-### Strike History
-
-| Resource | URL |
-|---|---|
-| London Underground strikes | https://en.wikipedia.org/wiki/London_Underground_strikes |
-| RMT union announcements | https://www.rmt.org.uk/news |
-
----
-
-*Built with Python · pandas · scipy · Streamlit · Plotly · Power BI*  
-*Data: Transport for London API · GLA LCEGS 2023/24 · ONS Census 2021*
+*Built with Python · pandas · scipy · requests · Streamlit · Plotly · Power BI*
+*Live data: TfL Unified API · ONS GVA by Local Authority*
