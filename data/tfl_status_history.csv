@@ -132,3 +132,46 @@ timestamp,date,modeName,name,statusSeverity,statusSeverityDescription,reason,dis
 2026-07-31T23:16:59Z,2026-07-31,tube,Waterloo & City,10,Good Service,,,
 2026-07-31T23:16:59Z,2026-07-31,overground,Weaver,10,Good Service,,,
 2026-07-31T23:16:59Z,2026-07-31,overground,Windrush,3,Part Suspended,Windrush Line: No service between Highbury & Islington and Dalston Junction while we fix a signal failure at Highbury & Islington. GOOD SERVICE on the rest of the line. ,Windrush Line: No service between Highbury & Islington and Dalston Junction while we fix a signal failure at Highbury & Islington. GOOD SERVICE on the rest of the line. ,partSuspended
+2026-08-01T01:05:33Z,2026-08-01,tube,Bakerloo,20,Service Closed,"Bakerloo Line: Service will resume later this morning.
+ ","Bakerloo Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Central,9,Minor Delays,Central Line: Minor delays due to an earlier customer incident.  ,Central Line: Minor delays due to an earlier customer incident.  ,minorDelays
+2026-08-01T01:05:33Z,2026-08-01,tube,Circle,20,Service Closed,"Circle Line: Service will resume later this morning.
+ ","Circle Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,District,20,Service Closed,"District Line: Service will resume later this morning.
+ ","District Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,dlr,DLR,20,Service Closed,"Docklands Light Railway: Service will resume later this morning.
+ ","Docklands Light Railway: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,elizabeth-line,Elizabeth line,20,Service Closed,"Service will resume later this morning.
+ ","Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Hammersmith & City,20,Service Closed,"Hammersmith and City Line: Service will resume later this morning.
+ ","Hammersmith and City Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Jubilee,10,Good Service,,,
+2026-08-01T01:05:33Z,2026-08-01,overground,Liberty,20,Service Closed,"Liberty Line: Service will resume later this morning.
+ ","Liberty Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,overground,Lioness,20,Service Closed,"Lioness Line: Service will resume later this morning.
+ ","Lioness Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Metropolitan,20,Service Closed,"Metropolitan Line: Service will resume later this morning.
+ ","Metropolitan Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,overground,Mildmay,20,Service Closed,"Mildmay Line: Service will resume later this morning.
+ ","Mildmay Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Northern,10,Good Service,,,
+2026-08-01T01:05:33Z,2026-08-01,tube,Piccadilly,4,Planned Closure,"PICCADILLY LINE: Saturday 1 and Sunday 2 August, between 0030 and 0430 each day, no service throughout the line. Replacement buses operate.","PICCADILLY LINE: Saturday 1 and Sunday 2 August, between 0030 and 0430 each day, no service throughout the line. Replacement buses operate.",plannedClosure
+2026-08-01T01:05:33Z,2026-08-01,overground,Suffragette,20,Service Closed,"Suffragette Line: Service will resume later this morning.
+ ","Suffragette Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,tube,Victoria,10,Good Service,,,
+2026-08-01T01:05:33Z,2026-08-01,tube,Waterloo & City,20,Service Closed,Waterloo and City Line: Service will resume at 06:00 on Monday. ,Waterloo and City Line: Service will resume at 06:00 on Monday. ,serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,overground,Weaver,20,Service Closed,"Weaver Line: Service will resume later this morning.
+ ","Weaver Line: Service will resume later this morning.
+ ",serviceClosed
+2026-08-01T01:05:33Z,2026-08-01,overground,Windrush,10,Good Service,,,
