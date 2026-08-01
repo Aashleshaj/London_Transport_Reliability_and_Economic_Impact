@@ -2,9 +2,9 @@ London Transport – Correlation & Disruption Analysis
 ============================================================
 
 Pearson Correlations (latest snapshot only, n=9):
-  Severity vs Borough GVA: r=0.114, p=0.789  [not yet significant]
-  Disruption Rate % vs GVA: r=-0.114, p=0.789  [not yet significant]
+  Severity vs Borough GVA: r=nan, p=nan  [not yet significant]
+  Disruption Rate % vs GVA: r=nan, p=nan  [not yet significant]
 
 Pearson Correlations (full history, borough x day, n=18):
-  Severity vs Borough GVA: r=-0.131, p=0.629  [not yet significant]
+  Severity vs Borough GVA: r=-0.119, p=0.660  [not yet significant]
   Disruption Rate % vs GVA: r=-0.038, p=0.890  [not yet significant]
