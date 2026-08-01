@@ -1,1 +1,4 @@
 data/_ons_gva_raw.csv
+.env
+__pycache__/
+*.pyc
