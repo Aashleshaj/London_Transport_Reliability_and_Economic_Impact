@@ -1,3 +1,4 @@
 disruption_cause,incidents,lines_affected,avg_severity,severity_label
-Other,10,10,6.8,Moderate
+Other,8,8,5.75,Severe
 Customer Incident,1,1,9.0,Minor
+Faulty Train,1,1,9.0,Minor
