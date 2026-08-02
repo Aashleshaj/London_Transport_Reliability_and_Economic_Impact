@@ -17,12 +17,12 @@ date,borough,lines_reported,disrupted_lines,average_severity,disruption_rate_pct
 2026-08-01,Tower Hamlets,2,0,11.25,0.0,Tower Hamlets,67537.4,2018.0
 2026-08-01,Waltham Forest,1,0,11.25,0.0,Waltham Forest,8795.4,2018.0
 2026-08-01,Westminster,10,23,9.7,230.0,,,
-2026-08-02,Brent,1,1,7.5,100.0,Brent,17411.3,2018.0
+2026-08-02,Brent,1,1,8.333333333333334,100.0,Brent,17411.3,2018.0
 2026-08-02,Camden,1,0,10.0,0.0,Camden,68061.2,2018.0
-2026-08-02,Hackney,1,2,7.0,200.0,Hackney,16245.2,2018.0
+2026-08-02,Hackney,1,3,7.0,300.0,Hackney,16245.2,2018.0
 2026-08-02,Havering,1,0,10.0,0.0,Havering,11423.1,2018.0
-2026-08-02,Islington,1,1,9.5,100.0,Islington,37251.6,2018.0
-2026-08-02,Lambeth,1,2,5.0,200.0,Lambeth,24637.5,2018.0
-2026-08-02,Tower Hamlets,2,2,7.5,100.0,Tower Hamlets,67537.4,2018.0
+2026-08-02,Islington,1,2,9.333333333333334,200.0,Islington,37251.6,2018.0
+2026-08-02,Lambeth,1,3,5.0,300.0,Lambeth,24637.5,2018.0
+2026-08-02,Tower Hamlets,2,3,7.5,150.0,Tower Hamlets,67537.4,2018.0
 2026-08-02,Waltham Forest,1,0,10.0,0.0,Waltham Forest,8795.4,2018.0
-2026-08-02,Westminster,10,10,8.6,100.0,,,
+2026-08-02,Westminster,10,15,8.6,150.0,,,
