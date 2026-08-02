@@ -36,3 +36,6 @@ jobs:
           git add data/
           git diff --staged --quiet || git commit -m "Live ONS economic data refresh: $(date -u +%Y-%m-%d)"
           git push
+      
+      - name: Rebuild SQLite database
+        run: python scripts/build_sqlite_db.py
