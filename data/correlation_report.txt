@@ -1,4 +1,4 @@
-London Transport â€“ Correlation & Disruption Analysis
+London Transport – Correlation & Disruption Analysis
 ============================================================
 
 Pearson Correlations (latest snapshot only, n=9):
