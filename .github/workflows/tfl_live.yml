@@ -30,7 +30,10 @@ jobs:
       - name: Rebuild dashboard/Power BI data
         run: python scripts/build_dashboard_data.py
         continue-on-error: true   # first-ever run has no economic file yet
-
+        
+      - name: Rebuild SQLite database
+        run: python scripts/build_sqlite_db.py
+        
       - name: Commit updated data back to the repo
         run: |
           git config user.name "github-actions[bot]"
@@ -38,5 +41,4 @@ jobs:
           git add data/
           git diff --staged --quiet || git commit -m "Live TfL poll: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push
-      - name: Rebuild SQLite database
-        run: python scripts/build_sqlite_db.py
+      
