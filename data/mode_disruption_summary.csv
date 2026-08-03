@@ -1,5 +1,5 @@
 modeName,total_lines,disrupted_lines,avg_severity,disruption_rate_pct
-dlr,1,1,5.0,100.0
-elizabeth-line,1,0,10.0,0.0
-overground,6,4,7.666666666666667,66.7
-tube,11,4,8.545454545454545,36.4
+dlr,1,0,20.0,0.0
+elizabeth-line,1,0,20.0,0.0
+overground,6,0,20.0,0.0
+tube,11,0,20.0,0.0

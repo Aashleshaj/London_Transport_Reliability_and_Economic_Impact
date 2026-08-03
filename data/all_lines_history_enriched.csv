@@ -555,3 +555,56 @@ timestamp,date,modeName,name,statusSeverity,statusSeverityDescription,reason,dis
 2026-08-02T23:38:05Z,2026-08-02,tube,Waterloo & City,4,Planned Closure,"Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.","Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",plannedClosure,Westminster,Planned Closure,True,Other,
 2026-08-02T23:38:05Z,2026-08-02,overground,Weaver,10,Good Service,,,,Tower Hamlets,Good Service,False,Unknown,
 2026-08-02T23:38:05Z,2026-08-02,overground,Windrush,5,Part Closure,"WINDRUSH LINE: Sunday 2 August, no service between Wandsworth Road and Clapham Junction. Trains will divert to/from Battersea Park after Wandsworth Road. Use local buses via any reasonable route between Clapham Junction and Battersea Park / Surrey Quays or Southern trains between Battersea Park and Clapham Junction, where tickets will be accepted. In addition, the early Sunday morning train at 0001 from Highbury & Islington to Battersea Park will not run.","WINDRUSH LINE: Sunday 2 August, no service between Wandsworth Road and Clapham Junction. Trains will divert to/from Battersea Park after Wandsworth Road. Use local buses via any reasonable route between Clapham Junction and Battersea Park / Surrey Quays or Southern trains between Battersea Park and Clapham Junction, where tickets will be accepted. In addition, the early Sunday morning train at 0001 from Highbury & Islington to Battersea Park will not run.",partClosure,Lambeth,Part Closure,True,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Bakerloo,20,Service Closed,"Bakerloo Line: Service will resume later this morning.
+ ","Bakerloo Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Central,20,Service Closed,"Central Line: Service will resume later this morning.
+ ","Central Line: Service will resume later this morning.
+ ",serviceClosed,Islington,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Circle,20,Service Closed,"Circle Line: Service will resume later this morning.
+ ","Circle Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,District,20,Service Closed,"District Line: Service will resume later this morning.
+ ","District Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,dlr,DLR,20,Service Closed,"Docklands Light Railway: Service will resume later this morning.
+ ","Docklands Light Railway: Service will resume later this morning.
+ ",serviceClosed,Tower Hamlets,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,elizabeth-line,Elizabeth line,20,Service Closed,"Service will resume later this morning.
+ ","Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Hammersmith & City,20,Service Closed,"Hammersmith and City Line: Service will resume later this morning.
+ ","Hammersmith and City Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Jubilee,20,Service Closed,"Jubilee Line: Service will resume later this morning.
+ ","Jubilee Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,overground,Liberty,20,Service Closed,"Liberty Line: Service will resume later this morning.
+ ","Liberty Line: Service will resume later this morning.
+ ",serviceClosed,Havering,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,overground,Lioness,20,Service Closed,"Lioness Line: Service will resume later this morning.
+ ","Lioness Line: Service will resume later this morning.
+ ",serviceClosed,Brent,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Metropolitan,20,Service Closed,"Metropolitan Line: Service will resume later this morning.
+ ","Metropolitan Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,overground,Mildmay,20,Service Closed,"Mildmay Line: Service will resume later this morning.
+ ","Mildmay Line: Service will resume later this morning.
+ ",serviceClosed,Hackney,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Northern,20,Service Closed,"Northern Line: Service will resume later this morning.
+ ","Northern Line: Service will resume later this morning.
+ ",serviceClosed,Camden,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Piccadilly,20,Service Closed,Piccadilly Line: Service will resume later this morning. There will be no service between Cockfosters and Uxbridge due to planned engineering work. ,Piccadilly Line: Service will resume later this morning. There will be no service between Cockfosters and Uxbridge due to planned engineering work. ,serviceClosed,Westminster,No Step Free Access,False,Planned Works,Cockfosters and Uxbridge
+2026-08-03T01:13:06Z,2026-08-03,overground,Suffragette,20,Service Closed,"Suffragette Line: Service will resume later this morning.
+ ","Suffragette Line: Service will resume later this morning.
+ ",serviceClosed,Waltham Forest,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Victoria,20,Service Closed,"Victoria Line: Service will resume later this morning.
+ ","Victoria Line: Service will resume later this morning.
+ ",serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,tube,Waterloo & City,20,Service Closed,Waterloo and City Line: Service will resume at 06:00 on Monday. ,Waterloo and City Line: Service will resume at 06:00 on Monday. ,serviceClosed,Westminster,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,overground,Weaver,20,Service Closed,"Weaver Line: Service will resume later this morning.
+ ","Weaver Line: Service will resume later this morning.
+ ",serviceClosed,Tower Hamlets,No Step Free Access,False,Other,
+2026-08-03T01:13:06Z,2026-08-03,overground,Windrush,20,Service Closed,"Windrush Line: Service will resume later this morning.
+ ","Windrush Line: Service will resume later this morning.
+ ",serviceClosed,Lambeth,No Step Free Access,False,Other,
