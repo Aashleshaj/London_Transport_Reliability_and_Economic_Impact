@@ -1,1 +1,2 @@
 disruption_cause,incidents,lines_affected,avg_severity,severity_label
+Points Failure,1,1,6.0,Severe
