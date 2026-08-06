@@ -50,86 +50,20 @@ Two different "live" speeds, by design: the Streamlit dashboard hits the TfL API
 
 ### 2.1 Data flow
 
-```mermaid
-flowchart TD
-    subgraph Sources["External Live Data Sources"]
-        TFL["TfL Unified API<br/>api.tfl.gov.uk<br/>Line status, all modes"]
-        ONS["ONS API<br/>GVA by industry by local authority"]
-    end
-
-    subgraph Fetchers["scripts/ — Fetch Layer"]
-        LOGGER["live_status_logger.py<br/>polls every run, appends"]
-        ECON["fetch_economic_data.py<br/>downloads + filters to London boroughs"]
-    end
-
-    subgraph Storage["data/ — Growing Live Datasets"]
-        HIST[("tfl_status_history.csv<br/>every line, every poll, ever")]
-        GVA[("borough_economic_live.csv<br/>latest GVA per borough")]
-    end
-
-    subgraph Build["scripts/build_dashboard_data.py"]
-        ENRICH["Enrich: line → borough,<br/>severity label, disruption cause"]
-        SUMM["Aggregate: borough summary,<br/>daily trend, mode/cause summary"]
-        RISK["Risk score + Pearson correlation<br/>(latest snapshot AND full history)"]
-    end
-
-    subgraph Outputs["data/ — Dashboard-ready Outputs"]
-        O1[("all_lines_combined.csv")]
-        O2[("disruption_enriched.csv")]
-        O3[("borough_disruption_summary.csv")]
-        O4[("borough_disruption_daily.csv")]
-        O5[("disruption_cause_summary.csv")]
-        O6[("mode_disruption_summary.csv")]
-        O7[("forecast_disruption_risk.csv")]
-        O8[("merged_transport_economic.csv")]
-        O9[("all_lines_history_enriched.csv")]
-    end
-
-    subgraph Consumers["Consumers"]
-        ST["Streamlit dashboard.py<br/>+ direct live API call for Tab 1"]
-        PBI["Power BI<br/>reads raw.githubusercontent.com URLs"]
-    end
-
-    TFL --> LOGGER --> HIST
-    ONS --> ECON --> GVA
-    HIST --> ENRICH
-    GVA --> ENRICH
-    ENRICH --> SUMM --> RISK
-    RISK --> O1 & O2 & O3 & O4 & O5 & O6 & O7 & O8 & O9
-    O1 & O2 & O3 & O4 & O5 & O6 & O7 --> ST
-    O1 & O2 & O3 & O4 & O5 & O6 & O7 --> PBI
-    TFL -. "direct call,<br/>cached 2 min" .-> ST
-```
+![Data flow architecture diagram](data/images/architecture_dataflow.png)
 
 ### 2.2 Automation schedule
 
-```mermaid
-sequenceDiagram
-    participant Cron as GitHub Actions Cron
-    participant TfLFlow as tfl_live.yml
-    participant EconFlow as economic_data.yml
-    participant Repo as Repo (data/)
-
-    Note over Cron,Repo: Runs unattended, no manual downloads
-
-    loop Every 15 minutes
-        Cron->>TfLFlow: trigger
-        TfLFlow->>TfLFlow: live_status_logger.py --once
-        TfLFlow->>TfLFlow: build_dashboard_data.py
-        TfLFlow->>Repo: commit + push updated data/
-    end
-
-    loop Weekly (Monday 06:00 UTC)
-        Cron->>EconFlow: trigger
-        EconFlow->>EconFlow: fetch_economic_data.py --force
-        EconFlow->>EconFlow: build_dashboard_data.py
-        EconFlow->>Repo: commit + push updated data/
-    end
-```
+![GitHub Actions automation schedule diagram](data/images/automation_schedule.png)
 
 GVA is only published annually by ONS regardless of source — the weekly cadence
 just means the repo always reflects whatever ONS has most recently released,
 with zero manual steps.
+
+*(Diagram source files are hand-authored SVG, not Mermaid — GitHub's Mermaid
+renderer can silently fail depending on the viewing context, so these are
+committed as plain images instead. To edit them, open the `.svg` source in
+`docs/images/` in any text editor or vector tool and re-export to `.png`.)*
 
 ---
 
@@ -151,14 +85,16 @@ in this pipeline.
 ```
 London_Transport_Reliability_and_Economic_Impact/
 │
-├── dashboard.py                       # Streamlit dashboard — single source of truth
-│                                       # (see Known Issues — a stale duplicate currently
-│                                       #  also exists at scripts/dashboard.py)
-│
 ├── scripts/
-│   ├── live_status_logger.py          # Fetch layer — TfL API → tfl_status_history.csv
-│   ├── fetch_economic_data.py         # Fetch layer — ONS API → borough_economic_live.csv
-│   └── build_dashboard_data.py        # Enrichment + risk scoring + correlation, all outputs
+│   ├── dashboard.py                    # Streamlit dashboard — single source of truth
+│   ├── live_status_logger.py           # Fetch layer — TfL API → tfl_status_history.csv
+│   ├── fetch_economic_data.py          # Fetch layer — ONS API → borough_economic_live.csv
+│   ├── build_dashboard_data.py         # Enrichment + risk scoring + correlation, all outputs
+│   └── build_sqlite_db.py              # Loads the 7 dashboard-ready CSVs into london_transport.db
+│
+├── docs/images/
+│   ├── architecture_dataflow.svg / .png
+│   └── automation_schedule.svg / .png
 │
 ├── .github/workflows/
 │   ├── tfl_live.yml                   # Every 15 min
@@ -185,7 +121,8 @@ London_Transport_Reliability_and_Economic_Impact/
     ├── mode_disruption_summary.csv     # Per-mode disruption rate (current snapshot)
     ├── forecast_disruption_risk.csv    # Composite risk score + estimated GVA at risk
     ├── all_lines_history_enriched.csv  # Full enriched history, every poll
-    └── correlation_report.txt          # Pearson correlations — snapshot AND full history
+    ├── correlation_report.txt          # Pearson correlations — snapshot AND full history
+    └── london_transport.db             # SQLite database (build_sqlite_db.py) — powers the text-to-SQL agent
 ```
 
 ---
@@ -295,9 +232,9 @@ this as "here's what the shape of the data looks like," not a fixed result.
 
 | Mode | Total Lines | Disrupted | Disruption Rate |
 |---|---|---|---|
-| Tube | 11 | 6 | 54.5% |
+| Tube | 11 | 1 | 9.1% |
 | Overground | 6 | 0 | 0.0% |
-| Elizabeth line | 1 | 0 | 0.0% |
+| Elizabeth line | 1 | 1 | 100.0% |
 | DLR | 1 | 0 | 0.0% |
 
 **Correlation report (`correlation_report.txt`):**
@@ -307,9 +244,9 @@ Pearson Correlations (latest snapshot only, n=9):
   Severity vs Borough GVA: r=-0.098, p=0.818  [not yet significant]
   Disruption Rate % vs GVA: r=0.098, p=0.818  [not yet significant]
 
-Pearson Correlations (full history, borough x day, n=18):
-  Severity vs Borough GVA: r=-0.079, p=0.770  [not yet significant]
-  Disruption Rate % vs GVA: r=-0.020, p=0.940  [not yet significant]
+Pearson Correlations (full history, borough x day, n=45):
+  Severity vs Borough GVA: r=0.051, p=0.753  [not yet significant]
+  Disruption Rate % vs GVA: r=-0.086, p=0.599  [not yet significant]
 ```
 
 Correlations are still not significant — expected this early. `n` grows by 9
