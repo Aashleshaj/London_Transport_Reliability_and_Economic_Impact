@@ -55,7 +55,6 @@ Two different "live" speeds, by design: the Streamlit dashboard hits the TfL API
 ### 2.2 Automation schedule
 
 ![GitHub Actions automation schedule diagram](data/images/automation_schedule.png)
-
 GVA is only published annually by ONS regardless of source — the weekly cadence
 just means the repo always reflects whatever ONS has most recently released,
 with zero manual steps.
