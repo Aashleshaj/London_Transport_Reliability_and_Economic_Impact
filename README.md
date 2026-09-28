@@ -2,7 +2,7 @@
 
 > **Does transport unreliability hit outer London harder than the centre — and what does it cost the economy?**
 >
-> This project polls **live** TfL service status across all modes (Tube, Overground, DLR, Elizabeth line), classifies disruptions by root cause, joins them to **live** ONS borough-level GVA data, and surfaces the result through a real-time Streamlit dashboard and a Power BI report. No manually-downloaded files are read anywhere in the pipeline — everything is fetched by code, on a schedule, via GitHub Actions.
+> This project polls **live** TfL service status across all modes (Tube, Overground, DLR, Elizabeth line), classifies disruptions by root cause, joins them to **live** ONS borough-level data and surfaces the result through a real-time Streamlit dashboard and a Power BI report. No manually-downloaded files are read anywhere in the pipeline — everything is fetched by code, on a schedule, via GitHub Actions.
 
 ---
 
