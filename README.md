@@ -63,7 +63,6 @@ with zero manual steps.
 renderer can silently fail depending on the viewing context, so these are
 committed as plain images instead. To edit them, open the `.svg` source in
 `docs/images/` in any text editor or vector tool and re-export to `.png`.)*
-
 ---
 
 ## 3. Data Sources (Live APIs)
